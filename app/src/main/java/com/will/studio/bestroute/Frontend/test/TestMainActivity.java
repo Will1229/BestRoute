@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.Frontend.main.test;
+package com.will.studio.bestroute.Frontend.test;
 
 import android.support.design.widget.NavigationView;
 import android.test.ActivityInstrumentationTestCase2;
