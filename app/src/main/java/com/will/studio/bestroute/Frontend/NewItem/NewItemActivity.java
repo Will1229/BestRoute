@@ -16,6 +16,34 @@ import com.will.studio.bestroute.R;
 public class NewItemActivity extends AppCompatActivity {
 
     public static final String TAG = NewItemActivity.class.getSimpleName();
+    private View.OnClickListener onClickListener;
+
+    public NewItemActivity() {
+        onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.save_button:
+                        RouteItem newItem = readFromAllText();
+
+                        if (newItem != null) {
+                            RouteDataManager routeDataManager = new RouteDataManagerImpl();
+                            String dir = getApplicationContext().getFilesDir().getAbsolutePath();
+                            boolean success = routeDataManager.saveItem(dir, newItem);
+                            if (success) {
+                                finish();
+                            }
+                        }
+                        break;
+                    case R.id.cancel_button:
+                        finish();
+                        break;
+                    case R.id.test_button:
+                        break;
+                }
+            }
+        };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,45 +54,26 @@ public class NewItemActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final Button saveButton = (Button) findViewById(R.id.save_button);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RouteItem newItem = readFromAllText();
-
-                RouteDataManager routeDataManager = new RouteDataManagerImpl();
-                String dir = getApplicationContext().getFilesDir().getAbsolutePath();
-                boolean success = routeDataManager.saveData(dir, newItem);
-                if (success) {
-                    finish();
-                }
-            }
-        });
+        saveButton.setOnClickListener(onClickListener);
 
         final Button cancelButton = (Button) findViewById(R.id.cancel_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        cancelButton.setOnClickListener(onClickListener);
 
         final Button testButton = (Button) findViewById(R.id.test_button);
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        testButton.setOnClickListener(onClickListener);
     }
 
     private RouteItem readFromAllText() {
 
         EditText editText = (EditText) findViewById(R.id.From);
         String from = editText.getText().toString();
+        if (from.length() == 0) return null;
         editText = (EditText) findViewById(R.id.To);
         String to = editText.getText().toString();
+        if (to.length() == 0) return null;
         editText = (EditText) findViewById(R.id.Time);
         String time = editText.getText().toString();
+        if (time.length() == 0) return null;
 
         RouteItem item = new RouteItem(from, to, time);
 

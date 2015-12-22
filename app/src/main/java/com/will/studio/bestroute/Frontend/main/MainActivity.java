@@ -1,10 +1,10 @@
 package com.will.studio.bestroute.Frontend.main;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.will.studio.bestroute.Backend.RouteDataManager;
 import com.will.studio.bestroute.Backend.RouteDataManagerImpl;
@@ -29,6 +33,11 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    ArrayAdapter<String> adapter;
+
+    public MainActivity() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +46,12 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_add_new_item);
         setSupportActionBar(toolbar);
 
-        // TODO implement floating action button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final Intent newItemIntent = new Intent(this, NewItemActivity.class);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(newItemIntent);
             }
         });
 
@@ -56,27 +64,43 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        TextView textView = (TextView) findViewById(R.id.textView2);
-        RouteDataManager routeDataManager = new RouteDataManagerImpl();
-        String dir = getApplicationContext().getFilesDir().getAbsolutePath();
-        ArrayList<RouteItem> itemList = routeDataManager.readAllData(dir);
-        if (itemList.size() > 0) {
-            textView.setText(itemList.get(0).toString());
-        }
+        showRouteItems();
+
+        ListView view = (ListView) findViewById(R.id.main_list);
+        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, "TODO", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     protected void onResume() {
-        Log.d(TAG, "onResume!\n");
         super.onResume();
-        TextView textView = (TextView) findViewById(R.id.textView2);
+        showRouteItems();
+    }
+
+    private void showRouteItems() {
         RouteDataManager routeDataManager = new RouteDataManagerImpl();
         String dir = getApplicationContext().getFilesDir().getAbsolutePath();
-        ArrayList<RouteItem> itemList = routeDataManager.readAllData(dir);
-        if (itemList.size() > 0) {
-            Log.d(TAG, "setText " + itemList.get(0).toString());
-            textView.setText(itemList.get(0).toString());
+        ArrayList<RouteItem> itemList = routeDataManager.readAllItems(dir);
+
+        ArrayList<String> itemNameList = new ArrayList<>();
+
+        for (RouteItem i : itemList
+                ) {
+            itemNameList.add(i.getFrom());
         }
+
+        adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                itemNameList);
+        ListView view = (ListView) findViewById(R.id.main_list);
+        view.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+
     }
 
     @Override
@@ -120,8 +144,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_addNewItem) {
-            Intent intent = new Intent(this, NewItemActivity.class);
-            startActivity(intent);
+            Intent newItemIntent = new Intent(this, NewItemActivity.class);
+            startActivity(newItemIntent);
             return true;
 
         } else if (id == R.id.nav_manage) {

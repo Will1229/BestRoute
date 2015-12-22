@@ -8,9 +8,11 @@ import java.util.ArrayList;
  */
 public interface RouteDataManager {
 
-    boolean saveData(String destDir, RouteItem newItem);
+    boolean saveItem(String destDir, RouteItem newItem);
 
-    RouteItem readData(String srcDir);
+    RouteItem readItem(String srcDir);
 
-    ArrayList<RouteItem> readAllData(String srcDir);
+    boolean deleteItem(String destDir);
+
+    ArrayList<RouteItem> readAllItems(String srcDir);
 }

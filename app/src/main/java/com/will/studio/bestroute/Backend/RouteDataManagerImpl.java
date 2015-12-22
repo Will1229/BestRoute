@@ -19,8 +19,7 @@ public class RouteDataManagerImpl implements RouteDataManager {
 
         itemFilter = new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                String lowercaseName = name.toLowerCase();
-                if (lowercaseName.startsWith(itemPrefix)) {
+                if (name.startsWith(itemPrefix)) {
                     return true;
                 } else {
                     return false;
@@ -30,25 +29,31 @@ public class RouteDataManagerImpl implements RouteDataManager {
     }
 
     @Override
-    public boolean saveData(String destDir, RouteItem newItem) {
+    public boolean saveItem(String destDir, RouteItem newItem) {
 
         String filePath = destDir + File.separator + itemPrefix + Long.toString(System.currentTimeMillis());
         return newItem.writeToDisc(filePath);
     }
 
     @Override
-    public RouteItem readData(String destDir) {
+    public RouteItem readItem(String destDir) {
         RouteItem item = new RouteItem();
         item.restoreFromDisc(destDir);
         return item;
     }
 
     @Override
-    public ArrayList<RouteItem> readAllData(String srcDir) {
+    public boolean deleteItem(String destDir) {
+        return new File (destDir).delete();
+    }
+
+
+    @Override
+    public ArrayList<RouteItem> readAllItems(String srcDir) {
         File[] fileList = new File(srcDir).listFiles(itemFilter);
         for (File file : fileList
                 ) {
-            itemList.add(readData(file.getAbsolutePath()));
+            itemList.add(readItem(file.getAbsolutePath()));
         }
 
         return itemList;

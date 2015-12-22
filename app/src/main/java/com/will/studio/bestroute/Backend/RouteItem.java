@@ -16,9 +16,11 @@ import java.io.Serializable;
  */
 public class RouteItem implements Serializable {
 
-    private String from = null;
-    private String to = null;
-    private String time = null;
+    private final String EMPTY_STRING = "";
+
+    private String from = EMPTY_STRING;
+    private String to = EMPTY_STRING;
+    private String time = EMPTY_STRING;
 
     public RouteItem() {
     }
@@ -113,8 +115,7 @@ public class RouteItem implements Serializable {
                 return false;
             }
         }
-        Log.d(NewItemActivity.TAG, "restore item to " + filePath);
+        Log.d(NewItemActivity.TAG, "restore item from " + filePath);
         return true;
     }
-
 }
