@@ -47,13 +47,17 @@ public class RouteDataManagerImplTest extends TestCase {
         String to = "to place 222";
         String time = "11:30";
         RouteItem inputItem = new RouteItem(from, to, time);
-        routeDataManager.saveData(testDirPath, inputItem);
+        assertNull(inputItem.getFilePath());
+        routeDataManager.saveItem(testDirPath, inputItem);
+        String filePath = inputItem.getFilePath();
+        assertNotNull(filePath);
         File[] files = testDir.listFiles();
         assertEquals(1, files.length);
-        RouteItem outputItem = routeDataManager.readData(files[0].getAbsolutePath());
+        RouteItem outputItem = routeDataManager.restoreItem(files[0].getAbsolutePath());
         assertEquals(inputItem.getFrom(), outputItem.getFrom());
         assertEquals(inputItem.getTo(), outputItem.getTo());
         assertEquals(inputItem.getTime(), outputItem.getTime());
+        assertEquals(filePath, outputItem.getFilePath());
         files[0].delete();
     }
 
@@ -65,10 +69,10 @@ public class RouteDataManagerImplTest extends TestCase {
         RouteItem inputItem = new RouteItem(from, to, time);
 
         for (int i = 0; i < loop; ++i) {
-            routeDataManager.saveData(testDirPath, inputItem);
+            routeDataManager.saveItem(testDirPath, inputItem);
         }
 
-        ArrayList<RouteItem> itemArrayList = routeDataManager.readAllItems(testDirPath);
+        ArrayList<RouteItem> itemArrayList = routeDataManager.getAllItems(testDirPath);
         File[] files = testDir.listFiles();
         assertEquals(loop, files.length);
         assertEquals(loop, itemArrayList.size());

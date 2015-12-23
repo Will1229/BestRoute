@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.will.studio.bestroute.Frontend.NewItem.NewItemActivity;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,11 +17,28 @@ import java.io.Serializable;
  */
 public class RouteItem implements Serializable {
 
-    private final String EMPTY_STRING = "";
+    private String from;
+    private String to;
+    private String time;
+    private String filePath;
 
-    private String from = EMPTY_STRING;
-    private String to = EMPTY_STRING;
-    private String time = EMPTY_STRING;
+    @Override
+    public String toString() {
+        return "RouteItem{" +
+                "from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", time='" + time + '\'' +
+                ", filePath='" + filePath + '\'' +
+                '}';
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 
     public RouteItem() {
     }
@@ -58,64 +76,67 @@ public class RouteItem implements Serializable {
         return to;
     }
 
-    @Override
-    public String toString() {
-        return "RouteItem{" +
-                "from='" + from + '\'' +
-                ", to='" + to + '\'' +
-                ", time='" + time + '\'' +
-                '}';
-    }
-
     public boolean writeToDisc(final String filePath) {
         FileOutputStream fos = null;
         ObjectOutputStream oos = null;
         try {
             fos = new FileOutputStream(filePath);
             oos = new ObjectOutputStream(fos);
-
-            oos.writeObject(getFrom());
-            oos.writeObject(getTo());
-            oos.writeObject(getTime());
+            setFilePath(filePath);
+            oos.writeObject(this);
 
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         } finally {
             try {
-                oos.close();
-                fos.close();
+                if (oos != null) {
+                    oos.close();
+                }
+                if (fos != null) {
+                    fos.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
-                return false;
             }
         }
+
         Log.d(NewItemActivity.TAG, "save item to " + filePath);
         return true;
     }
 
-    public boolean restoreFromDisc(final String filePath) {
+    public static RouteItem restoreFromDisc(final String filePath) {
+
+        RouteItem item = null;
+
         FileInputStream fis = null;
         ObjectInputStream ois = null;
         try {
             fis = new FileInputStream(filePath);
             ois = new ObjectInputStream(fis);
-            setFrom((String) ois.readObject());
-            setTo((String) ois.readObject());
-            setTime((String) ois.readObject());
+            item = (RouteItem) ois.readObject();
         } catch (final Exception e) {
             e.printStackTrace();
-            return false;
+            return null;
         } finally {
             try {
-                ois.close();
-                fis.close();
+                if (ois != null) {
+                    ois.close();
+                }
+                if (fis != null) {
+                    fis.close();
+                }
             } catch (final Exception ioe) {
                 ioe.printStackTrace();
-                return false;
             }
         }
         Log.d(NewItemActivity.TAG, "restore item from " + filePath);
-        return true;
+        return item;
+    }
+
+    public void delete() {
+        File file = new File(filePath);
+        file.delete();
+
     }
 }

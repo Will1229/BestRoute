@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class RouteDataManagerImpl implements RouteDataManager {
 
     private ArrayList<RouteItem> itemList = null;
-
     private FilenameFilter itemFilter = null;
     private String itemPrefix = "Route_item_";
 
@@ -19,11 +18,7 @@ public class RouteDataManagerImpl implements RouteDataManager {
 
         itemFilter = new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                if (name.startsWith(itemPrefix)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return name.startsWith(itemPrefix);
             }
         };
     }
@@ -32,31 +27,51 @@ public class RouteDataManagerImpl implements RouteDataManager {
     public boolean saveItem(String destDir, RouteItem newItem) {
 
         String filePath = destDir + File.separator + itemPrefix + Long.toString(System.currentTimeMillis());
+        itemList.add(newItem);
         return newItem.writeToDisc(filePath);
     }
 
     @Override
-    public RouteItem readItem(String destDir) {
-        RouteItem item = new RouteItem();
-        item.restoreFromDisc(destDir);
+    public boolean deleteItem(String destDir, String name) {
+        return false;
+    }
+
+    @Override
+    public boolean deleteAllItems(String destDir) {
+        for (RouteItem item : itemList
+                ) {
+            item.delete();
+        }
+        itemList.clear();
+        return false;
+    }
+
+    @Override
+    public RouteItem getItem(String destDir) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public ArrayList<RouteItem> getAllItems(String srcDir) {
+        return itemList;
+    }
+
+    @Override
+    public RouteItem restoreItem(String destDir) {
+        RouteItem item = RouteItem.restoreFromDisc(destDir);;
         return item;
     }
 
     @Override
-    public boolean deleteItem(String destDir) {
-        return new File (destDir).delete();
-    }
-
-
-    @Override
-    public ArrayList<RouteItem> readAllItems(String srcDir) {
+    public void restoreAllItems(String srcDir) {
         File[] fileList = new File(srcDir).listFiles(itemFilter);
+        itemList.clear();
         for (File file : fileList
                 ) {
-            itemList.add(readItem(file.getAbsolutePath()));
+            RouteItem item = RouteItem.restoreFromDisc(file.getAbsolutePath());
+            itemList.add(item);
         }
-
-        return itemList;
     }
 
 

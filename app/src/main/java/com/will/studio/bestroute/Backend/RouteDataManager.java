@@ -10,9 +10,15 @@ public interface RouteDataManager {
 
     boolean saveItem(String destDir, RouteItem newItem);
 
-    RouteItem readItem(String srcDir);
+    RouteItem getItem(String srcDir);
 
-    boolean deleteItem(String destDir);
+    boolean deleteItem(String destDir, String name);
 
-    ArrayList<RouteItem> readAllItems(String srcDir);
+    boolean deleteAllItems(String destDir);
+
+    ArrayList<RouteItem> getAllItems(String srcDir);
+
+    RouteItem restoreItem(String destDir);
+
+    void restoreAllItems(String srcDir);
 }

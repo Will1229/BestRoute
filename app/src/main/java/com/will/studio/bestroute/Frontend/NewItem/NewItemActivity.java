@@ -1,5 +1,6 @@
 package com.will.studio.bestroute.Frontend.NewItem;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +19,14 @@ public class NewItemActivity extends AppCompatActivity {
     public static final String TAG = NewItemActivity.class.getSimpleName();
     private View.OnClickListener onClickListener;
 
-    public NewItemActivity() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_item);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_add_new_item);
+        toolbar.setTitle(R.string.toolbar_title);
+        setSupportActionBar(toolbar);
+
         onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -31,6 +39,7 @@ public class NewItemActivity extends AppCompatActivity {
                             String dir = getApplicationContext().getFilesDir().getAbsolutePath();
                             boolean success = routeDataManager.saveItem(dir, newItem);
                             if (success) {
+                                setResult(RESULT_OK);
                                 finish();
                             }
                         }
@@ -43,15 +52,6 @@ public class NewItemActivity extends AppCompatActivity {
                 }
             }
         };
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_item);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_add_new_item);
-        toolbar.setTitle(R.string.toolbar_title);
-        setSupportActionBar(toolbar);
 
         final Button saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(onClickListener);

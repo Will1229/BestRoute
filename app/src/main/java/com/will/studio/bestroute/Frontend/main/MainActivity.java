@@ -1,11 +1,9 @@
 package com.will.studio.bestroute.Frontend.main;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,29 +12,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.will.studio.bestroute.Backend.RouteDataManager;
 import com.will.studio.bestroute.Backend.RouteDataManagerImpl;
 import com.will.studio.bestroute.Backend.RouteItem;
 import com.will.studio.bestroute.Frontend.NewItem.NewItemActivity;
-import com.will.studio.bestroute.R;
 import com.will.studio.bestroute.Frontend.settings.SettingsActivity;
+import com.will.studio.bestroute.R;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-    ArrayAdapter<String> adapter;
+    private RouteDataManager routeDataManager;
+    private String dir;
+    private final int newItemRequestCode = 1;
 
     public MainActivity() {
-
+        routeDataManager = new RouteDataManagerImpl();
     }
 
     @Override
@@ -64,7 +63,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        showRouteItems();
+        dir = getApplicationContext().getFilesDir().getAbsolutePath();
+        routeDataManager.restoreAllItems(dir);
+
+        refreshRouteItems();
 
         ListView view = (ListView) findViewById(R.id.main_list);
         view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,14 +80,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        showRouteItems();
+        routeDataManager.restoreAllItems(dir);
+        refreshRouteItems();
     }
 
-    private void showRouteItems() {
-        RouteDataManager routeDataManager = new RouteDataManagerImpl();
-        String dir = getApplicationContext().getFilesDir().getAbsolutePath();
-        ArrayList<RouteItem> itemList = routeDataManager.readAllItems(dir);
-
+    private void refreshRouteItems() {
+        ArrayList<RouteItem> itemList = routeDataManager.getAllItems(dir);
         ArrayList<String> itemNameList = new ArrayList<>();
 
         for (RouteItem i : itemList
@@ -93,14 +93,12 @@ public class MainActivity extends AppCompatActivity
             itemNameList.add(i.getFrom());
         }
 
-        adapter = new ArrayAdapter<>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 itemNameList);
         ListView view = (ListView) findViewById(R.id.main_list);
         view.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
-
     }
 
     @Override
@@ -132,6 +130,10 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
+        } else if (id == R.id.action_delete_all_plans) {
+            routeDataManager.deleteAllItems(dir);
+            refreshRouteItems();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_addNewItem) {
             Intent newItemIntent = new Intent(this, NewItemActivity.class);
-            startActivity(newItemIntent);
+            startActivityForResult(newItemIntent, newItemRequestCode);
             return true;
 
         } else if (id == R.id.nav_manage) {
@@ -157,5 +159,16 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == newItemRequestCode) {
+            if (resultCode == RESULT_OK) {
+//                routeDataManager.restoreAllItems(dir);
+                refreshRouteItems();
+            }
+        }
     }
 }
