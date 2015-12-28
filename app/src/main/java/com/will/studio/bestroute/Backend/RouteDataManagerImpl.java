@@ -59,8 +59,7 @@ public class RouteDataManagerImpl implements RouteDataManager {
 
     @Override
     public RouteItem restoreItem(String destDir) {
-        RouteItem item = RouteItem.restoreFromDisc(destDir);;
-        return item;
+        return RouteItem.restoreFromDisc(destDir);
     }
 
     @Override
@@ -73,6 +72,5 @@ public class RouteDataManagerImpl implements RouteDataManager {
             itemList.add(item);
         }
     }
-
 
 }

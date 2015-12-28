@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,9 +31,13 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String ITEM_NAME = "current_item";
+
     private RouteDataManager routeDataManager;
     private String dir;
     private final int newItemRequestCode = 1;
+    private Activity currentActivity = null;
+    private int currentItemIdx = 0;
 
     public MainActivity() {
         routeDataManager = new RouteDataManagerImpl();
@@ -41,8 +46,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        currentActivity = this;
+
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_add_new_item);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_current_items);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -68,13 +76,59 @@ public class MainActivity extends AppCompatActivity
 
         refreshRouteItems();
 
-        ListView view = (ListView) findViewById(R.id.main_list);
-        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ListView listView = (ListView) findViewById(R.id.main_list);
+        registerForContextMenu(listView);
+
+        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "TODO", Toast.LENGTH_SHORT).show();
+                if (position < 0) {
+                    return;
+                }
+                currentItemIdx = position;
+                currentActivity.openContextMenu(parent);
             }
-        });
+
+        };
+
+        listView.setOnItemClickListener(listener);
+
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.item_floating_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        super.onContextItemSelected(item);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        ArrayList<RouteItem> itemList = routeDataManager.getAllItems(dir);
+        RouteItem routeItem = itemList.get(currentItemIdx);
+
+        final Intent mapViewIntent = new Intent(this, MapViewActivity.class);
+
+        switch (item.getItemId()) {
+            case R.id.delete_item:
+                routeItem.delete();
+                routeDataManager.restoreAllItems(dir);
+                refreshRouteItems();
+                return true;
+            case R.id.edit_item:
+                break;
+            case R.id.back_item:
+                return true;
+            case R.id.call_google_map:
+                mapViewIntent.putExtra(ITEM_NAME, routeItem);
+                startActivity(mapViewIntent);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+
+        return true;
     }
 
     @Override
@@ -166,9 +220,10 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == newItemRequestCode) {
             if (resultCode == RESULT_OK) {
-//                routeDataManager.restoreAllItems(dir);
                 refreshRouteItems();
             }
         }
     }
+
+
 }

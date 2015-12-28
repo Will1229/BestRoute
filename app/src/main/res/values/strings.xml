@@ -14,10 +14,22 @@
     <string name="settings_title">Settings</string>
 
     <!-- Strings related to NewItemActivity -->
-    <string name="toolbar_title">Add New Route Plan</string>
+    <string name="new_item_toolbar_title">Add New Route Plan</string>
+    <string name="empty_new_item">Fill All Blanks</string>
 
     <!-- Strings related to MainActivity -->
     <string name="current_plans_title">My Route Plans</string>
+
+    <!-- Strings related to MapViewActivity -->
+    <string name="map_view_toolbar_title">Route</string>
+
+
+    <!-- Strings related to click_on_item menu -->
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="back">Back</string>
+    <string name="call_google_map">Show In Google Map</string>
+
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>

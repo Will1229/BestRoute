@@ -1,31 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:weightSum="1"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Frontend.main.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    android:orientation="vertical"
+    tools:context="com.will.studio.bestroute.Frontend.main.MapViewActivity">
 
     <TextView
+        android:id="@+id/map_view_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/current_plans_title"
-        android:textSize="@dimen/abc_dialog_padding_top_material" />
+        android:text="to be replaced in program"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    />
 
-    <ListView
-        android:id="@+id/main_list"
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map_view"
+        android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"></ListView>
+        tools:layout="@layout/notification_template_media" />
 
 </LinearLayout>
