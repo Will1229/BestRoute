@@ -16,6 +16,9 @@
     <!-- Strings related to NewItemActivity -->
     <string name="new_item_toolbar_title">Add New Route Plan</string>
     <string name="empty_new_item">Fill All Blanks</string>
+    <string name="show_route_button">Show Route</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="save_button">Save</string>
 
     <!-- Strings related to MainActivity -->
     <string name="current_plans_title">My Route Plans</string>

@@ -93,18 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true"
-            android:text="Test" />
-
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:text="Cancel" />
+            android:text="@string/show_route_button" />
 
         <Button
             android:id="@+id/save_button"
@@ -115,7 +104,18 @@
             android:layout_gravity="right"
             android:layout_weight="1"
             android:clickable="true"
-            android:text="Save" />
+            android:text="@string/save_button" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:text="@string/cancel_button" />
 
 
     </TableRow>
