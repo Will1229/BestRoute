@@ -138,16 +138,18 @@ public class MainActivity extends AppCompatActivity
 
     private void refreshRouteItems() {
         ArrayList<RouteItem> itemList = routeDataManager.getAllItems(dir);
-        ArrayList<String> itemNameList = new ArrayList<>();
+        ArrayList<String> itemHeadlineList = new ArrayList<>();
 
         for (RouteItem i : itemList
                 ) {
-            itemNameList.add(i.getFrom());
+            itemHeadlineList.add(" From " + i.getFrom()
+                    + " to " + i.getTo()
+                    + " at " + i.getTime());
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
-                itemNameList);
+                itemHeadlineList);
         ListView view = (ListView) findViewById(R.id.main_list);
         view.setAdapter(adapter);
         adapter.notifyDataSetChanged();

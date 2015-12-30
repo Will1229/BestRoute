@@ -1,5 +1,6 @@
 package com.will.studio.bestroute.Frontend.NewItem;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.will.studio.bestroute.Backend.RouteDataManager;
@@ -76,14 +78,19 @@ public class NewItemActivity extends AppCompatActivity {
         testButton.setOnClickListener(onClickListener);
     }
 
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(this.getFragmentManager(), "timePicker");
+    }
+
+
     private RouteItem readFromAllText() {
 
-        EditText editText = (EditText) findViewById(R.id.From);
+        EditText editText = (EditText) findViewById(R.id.New_Item_From);
         String from = editText.getText().toString();
-        editText = (EditText) findViewById(R.id.To);
+        editText = (EditText) findViewById(R.id.New_Item_To);
         String to = editText.getText().toString();
-        editText = (EditText) findViewById(R.id.Time);
-        String time = editText.getText().toString();
+        String time = ((TextView) findViewById(R.id.New_Item_Time)).getText().toString();
 
         if (from.length() == 0 || to.length() == 0 || time.length() == 0) {
             return null;
@@ -95,6 +102,5 @@ public class NewItemActivity extends AppCompatActivity {
 
         return item;
     }
-
 
 }

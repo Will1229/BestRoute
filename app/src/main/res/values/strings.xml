@@ -19,6 +19,11 @@
     <string name="show_route_button">Show Route</string>
     <string name="cancel_button">Cancel</string>
     <string name="save_button">Save</string>
+    <string name="new_item_from">Choose starting point</string>
+    <string name="new_item_to">To</string>
+    <string name="new_item_alarm">Alarm</string>
+    <string name="new_item_null_time">--:--</string>
+
 
     <!-- Strings related to MainActivity -->
     <string name="current_plans_title">My Route Plans</string>
