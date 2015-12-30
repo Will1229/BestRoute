@@ -1,8 +1,15 @@
 package com.will.studio.bestroute.Frontend.NewItem;
 
 import android.app.DialogFragment;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -36,7 +43,7 @@ public class NewItemActivity extends AppCompatActivity {
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RouteItem newItem = null;
+                RouteItem newItem;
                 switch (v.getId()) {
                     case R.id.save_button:
                         newItem = readFromAllText();
@@ -83,6 +90,42 @@ public class NewItemActivity extends AppCompatActivity {
         newFragment.show(this.getFragmentManager(), "timePicker");
     }
 
+    public void previewNotification(View v) {
+
+        RouteItem newItem = readFromAllText();
+        if (newItem == null) {
+            Toast.makeText(NewItemActivity.this, R.string.empty_new_item, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String title = "Your route plan is updated";
+        String content = "From " + newItem.getFrom() + " to " + newItem.getTo();
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.cast_ic_notification_0)
+                        .setContentTitle(title)
+                        .setContentText(content)
+                        .setSound(alarmSound);
+
+        Intent resultIntent = new Intent(this, MapViewActivity.class);
+        resultIntent.putExtra(MainActivity.ITEM_NAME, newItem);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MapViewActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+// mId allows you to update the notification later on.
+        mNotificationManager.notify(0, mBuilder.build());
+
+    }
+
 
     private RouteItem readFromAllText() {
 
@@ -102,5 +145,6 @@ public class NewItemActivity extends AppCompatActivity {
 
         return item;
     }
+
 
 }

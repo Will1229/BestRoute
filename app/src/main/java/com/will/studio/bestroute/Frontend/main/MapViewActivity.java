@@ -43,6 +43,7 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_map_view);
         routeItem = (RouteItem) getIntent().getSerializableExtra(MainActivity.ITEM_NAME);
         if (routeItem == null) {
+            Toast.makeText(getApplicationContext(), "routeItem is null", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -103,6 +104,11 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
         LatLng from = getLocationFromAddress(getApplicationContext(), routeItem.getFrom());
         LatLng to = getLocationFromAddress(getApplicationContext(), routeItem.getTo());
 
+        if (from == null || to == null) {
+            Toast.makeText(getApplicationContext(), "Unable to find From or To location", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // TODO: add icon
         map.addMarker(new MarkerOptions().position(from).title(routeItem.getFrom()));
         map.addMarker(new MarkerOptions().position(to).title(routeItem.getTo()));
@@ -112,16 +118,12 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
         map.getUiSettings().setCompassEnabled(true);
         map.setMyLocationEnabled(true);
 
-        if (from != null && to != null) {
-            // TODO: make them settable in new item activity
-            GoogleDirection.withServerKey("AIzaSyDPQ1GwAKKQZaxH1cmyVbx0FLDwKqKlJD8")
-                    .from(from)
-                    .to(to)
-                    .transitMode(TransportMode.DRIVING)
-                    .execute(directionCallback);
-        } else {
-            Toast.makeText(getApplicationContext(), "Unable to find From or To location", Toast.LENGTH_SHORT).show();
-        }
+        // TODO: make them settable in new item activity
+        GoogleDirection.withServerKey("AIzaSyDPQ1GwAKKQZaxH1cmyVbx0FLDwKqKlJD8")
+                .from(from)
+                .to(to)
+                .transitMode(TransportMode.DRIVING)
+                .execute(directionCallback);
 
     }
 

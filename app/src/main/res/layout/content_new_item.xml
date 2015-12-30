@@ -63,7 +63,7 @@
         <Button
             android:id="@+id/test_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="true"
             android:text="@string/show_route_button" />
@@ -71,7 +71,7 @@
         <Button
             android:id="@+id/save_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="true"
             android:text="@string/save_button" />
@@ -79,10 +79,24 @@
         <Button
             android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="true"
             android:text="@string/cancel_button" />
+
+
+    </LinearLayout>
+
+    <LinearLayout>
+
+        <Button
+            android:id="@+id/notification_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="previewNotification"
+            android:text="@string/notification_button" />
     </LinearLayout>
 
 

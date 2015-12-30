@@ -19,6 +19,7 @@
     <string name="show_route_button">Show Route</string>
     <string name="cancel_button">Cancel</string>
     <string name="save_button">Save</string>
+    <string name="notification_button">Preview Notification</string>
     <string name="new_item_from">Choose starting point</string>
     <string name="new_item_to">To</string>
     <string name="new_item_alarm">Alarm</string>
@@ -30,6 +31,10 @@
 
     <!-- Strings related to MapViewActivity -->
     <string name="map_view_toolbar_title">Route</string>
+
+    <!-- Strings related to Notification -->
+    <string name="notification_title">Time to arrive</string>
+    <string name="notification_content"></string>
 
 
     <!-- Strings related to click_on_item menu -->
