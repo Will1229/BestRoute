@@ -10,14 +10,14 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.will.studio.bestroute.Frontend.NewItem.NewItemActivity"
+    tools:context=".frontend.main.NewItemActivity"
     tools:showIn="@layout/activity_new_item">
 
 
     <TableRow>
 
         <EditText
-            android:id="@+id/New_Item_From"
+            android:id="@+id/new_item_from"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -30,7 +30,7 @@
     <TableRow>
 
         <EditText
-            android:id="@+id/New_Item_To"
+            android:id="@+id/new_item_to"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -49,7 +49,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
-            android:id="@+id/New_Item_Time"
+            android:id="@+id/new_item_time"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
@@ -61,19 +61,12 @@
     <LinearLayout android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/test_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:text="@string/show_route_button" />
-
-        <Button
             android:id="@+id/save_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="true"
+            android:onClick="onClickSaveButton"
             android:text="@string/save_button" />
 
         <Button
@@ -82,6 +75,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="true"
+            android:onClick="onClickCancelButton"
             android:text="@string/cancel_button" />
 
 
@@ -90,12 +84,12 @@
     <LinearLayout>
 
         <Button
-            android:id="@+id/notification_button"
-            android:layout_width="wrap_content"
+            android:id="@+id/preview_notification_button"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true"
-            android:onClick="previewNotification"
+            android:onClick="onClickPreviewNotificationButton"
             android:text="@string/notification_button" />
     </LinearLayout>
 

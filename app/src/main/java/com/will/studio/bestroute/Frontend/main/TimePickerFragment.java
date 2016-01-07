@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.Frontend.NewItem;
+package com.will.studio.bestroute.frontend.main;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -29,7 +29,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        TextView textView = (TextView) getActivity().findViewById(R.id.New_Item_Time);
+        TextView textView = (TextView) getActivity().findViewById(R.id.new_item_time);
         textView.setText(String.format("%02d:%02d", hourOfDay, minute));
     }
 }

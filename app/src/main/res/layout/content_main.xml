@@ -12,7 +12,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:weightSum="1"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Frontend.main.MainActivity"
+    tools:context=".frontend.main.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <TextView

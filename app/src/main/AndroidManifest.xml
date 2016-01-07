@@ -3,6 +3,7 @@
     package="com.will.studio.bestroute">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -15,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Frontend.main.MainActivity"
+            android:name=".frontend.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -25,10 +26,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Frontend.settings.SettingsActivity"
+            android:name=".frontend.settings.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".Frontend.NewItem.NewItemActivity"
+            android:name=".frontend.main.NewItemActivity"
             android:label="@string/title_activity_new_item"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -39,7 +40,15 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAGzeWRSZ52WwnQ4oqhYqHBP6dmJxBcjzc" />
 
-        <activity android:name=".Frontend.main.MapViewActivity"></activity>
+        <activity android:name=".frontend.main.MapViewActivity"></activity>
+
+        <receiver android:name=".frontend.main.BootReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

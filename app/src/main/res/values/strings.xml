@@ -15,7 +15,7 @@
 
     <!-- Strings related to NewItemActivity -->
     <string name="new_item_toolbar_title">Add New Route Plan</string>
-    <string name="empty_new_item">Fill All Blanks</string>
+    <string name="new_item_toast_fill_all_blanks">Please fill all blanks</string>
     <string name="show_route_button">Show Route</string>
     <string name="cancel_button">Cancel</string>
     <string name="save_button">Save</string>
@@ -28,14 +28,21 @@
 
     <!-- Strings related to MainActivity -->
     <string name="current_plans_title">My Route Plans</string>
+    <string name="success_to_save_new_item">Your route plan is saved and will be updated everyday at: </string>
+    <string name="fail_to_save_new_item">Failed to save. Try again</string>
 
     <!-- Strings related to MapViewActivity -->
     <string name="map_view_toolbar_title">Route</string>
 
     <!-- Strings related to Notification -->
-    <string name="notification_title">Time to arrive</string>
+    <string name="notification_title">Your route plan is updated</string>
     <string name="notification_content"></string>
+    <string name="notification_ticker">Time to arrive </string>
 
+    <!-- Strings related to Google Direction -->
+    <string name="direction_ok">Direction OK</string>
+    <string name="direction_nok">Direction not OK</string>
+    <string name="direction_failure">Direction failed</string>
 
     <!-- Strings related to click_on_item menu -->
     <string name="edit">Edit</string>
@@ -100,8 +107,5 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_new_item">NewItemActivity</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

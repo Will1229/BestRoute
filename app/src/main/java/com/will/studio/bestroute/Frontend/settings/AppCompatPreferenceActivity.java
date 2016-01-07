@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.Frontend.settings;
+package com.will.studio.bestroute.frontend.settings;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

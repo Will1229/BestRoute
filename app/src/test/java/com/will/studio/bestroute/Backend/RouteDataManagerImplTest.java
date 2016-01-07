@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.Backend;
+package com.will.studio.bestroute.backend;
 
 import junit.framework.TestCase;
 
@@ -19,12 +19,16 @@ public class RouteDataManagerImplTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         if (!testDir.exists()) {
-            testDir.mkdir();
+            if (!testDir.mkdir()) {
+                fail();
+            }
         }
         File[] fileList = testDir.listFiles();
         for (File f : fileList
                 ) {
-            f.delete();
+            if (!f.delete()) {
+                fail();
+            }
         }
     }
 
@@ -46,11 +50,16 @@ public class RouteDataManagerImplTest extends TestCase {
         String from = "from place 111";
         String to = "to place 222";
         String time = "11:30";
+
         RouteItem inputItem = new RouteItem(from, to, time);
+
         assertNull(inputItem.getFilePath());
+
         routeDataManager.saveItem(testDirPath, inputItem);
+
         String filePath = inputItem.getFilePath();
         assertNotNull(filePath);
+
         File[] files = testDir.listFiles();
         assertEquals(1, files.length);
         RouteItem outputItem = routeDataManager.restoreItem(files[0].getAbsolutePath());
@@ -58,7 +67,9 @@ public class RouteDataManagerImplTest extends TestCase {
         assertEquals(inputItem.getTo(), outputItem.getTo());
         assertEquals(inputItem.getTime(), outputItem.getTime());
         assertEquals(filePath, outputItem.getFilePath());
-        files[0].delete();
+        if (!files[0].delete()){
+            fail();
+        }
     }
 
     public void testReadAllData() throws Exception {

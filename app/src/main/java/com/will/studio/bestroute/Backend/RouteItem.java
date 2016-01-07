@@ -1,8 +1,8 @@
-package com.will.studio.bestroute.Backend;
+package com.will.studio.bestroute.backend;
 
 import android.util.Log;
 
-import com.will.studio.bestroute.Frontend.NewItem.NewItemActivity;
+import com.will.studio.bestroute.frontend.main.NewItemActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,9 +38,6 @@ public class RouteItem implements Serializable {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
-    }
-
-    public RouteItem() {
     }
 
     public RouteItem(String from, String to, String time) {
@@ -137,6 +134,10 @@ public class RouteItem implements Serializable {
     public void delete() {
         File file = new File(filePath);
         file.delete();
+    }
 
+    public boolean getDirectionFromGoogle() {
+
+        return true;
     }
 }

@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.Frontend.main;
+package com.will.studio.bestroute.frontend.main;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,12 +17,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.will.studio.bestroute.Backend.RouteDataManager;
-import com.will.studio.bestroute.Backend.RouteDataManagerImpl;
-import com.will.studio.bestroute.Backend.RouteItem;
-import com.will.studio.bestroute.Frontend.NewItem.NewItemActivity;
-import com.will.studio.bestroute.Frontend.settings.SettingsActivity;
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.RequestResult;
+import com.akexorcist.googledirection.constant.TransportMode;
+import com.akexorcist.googledirection.model.Direction;
+import com.google.android.gms.maps.model.LatLng;
+import com.will.studio.bestroute.backend.GoogleDirectionHelper;
+import com.will.studio.bestroute.backend.RouteDataManager;
+import com.will.studio.bestroute.backend.RouteDataManagerImpl;
+import com.will.studio.bestroute.backend.RouteItem;
+import com.will.studio.bestroute.frontend.settings.SettingsActivity;
 import com.will.studio.bestroute.R;
 
 import java.util.ArrayList;
@@ -30,11 +37,12 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String ITEM_NAME = "current_item";
+    public static final String ITEM_NAME = "current_route_item";
 
     private RouteDataManager routeDataManager;
     private String dir;
     private final int newItemRequestCode = 1;
+    public static final String newItemResult = "new_item_return_result";
     private Activity currentActivity = null;
     private int currentItemIdx = 0;
 
@@ -57,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(newItemIntent);
+                startActivityForResult(newItemIntent, newItemRequestCode);
             }
         });
 
@@ -104,9 +112,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onContextItemSelected(MenuItem item) {
         super.onContextItemSelected(item);
         ArrayList<RouteItem> itemList = routeDataManager.getAllItems(dir);
-        RouteItem routeItem = itemList.get(currentItemIdx);
-
-        final Intent mapViewIntent = new Intent(this, MapViewActivity.class);
+        final RouteItem routeItem = itemList.get(currentItemIdx);
 
         switch (item.getItemId()) {
             case R.id.delete_item:
@@ -115,18 +121,49 @@ public class MainActivity extends AppCompatActivity
                 refreshRouteItems();
                 return true;
             case R.id.edit_item:
-                break;
+                return false;
             case R.id.back_item:
                 return true;
             case R.id.call_google_map:
-                mapViewIntent.putExtra(ITEM_NAME, routeItem);
-                startActivity(mapViewIntent);
-                return true;
+                if (getDirectionAndShow(routeItem)) return true;
             default:
                 return super.onContextItemSelected(item);
         }
+    }
 
-        return true;
+    private boolean getDirectionAndShow(final RouteItem routeItem) {
+        LatLng from = GoogleDirectionHelper.getLocationFromAddress(this, routeItem.getFrom());
+        LatLng to = GoogleDirectionHelper.getLocationFromAddress(this, routeItem.getTo());
+        if (from == null || to == null) {
+            return true;
+        }
+
+        // TODO: make them settable in new item activity
+        GoogleDirection
+                .withServerKey("AIzaSyDPQ1GwAKKQZaxH1cmyVbx0FLDwKqKlJD8")
+                .from(from)
+                .to(to)
+                .transitMode(TransportMode.DRIVING)
+                .execute(new DirectionCallback() {
+                    @Override
+                    public void onDirectionSuccess(Direction direction) {
+                        String status = direction.getStatus();
+                        if (status.equals(RequestResult.OK)) {
+                            GoogleDirectionHelper.setDirection(direction);
+                            final Intent mapViewIntent = new Intent(getApplicationContext(), MapViewActivity.class);
+                            mapViewIntent.putExtra(ITEM_NAME, routeItem);
+                            startActivity(mapViewIntent);
+                        } else {
+                            Toast.makeText(MainActivity.this, getText(R.string.direction_nok), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onDirectionFailure(Throwable t) {
+                        Toast.makeText(MainActivity.this, getText(R.string.direction_failure), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        return false;
     }
 
     @Override
@@ -220,8 +257,12 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == newItemRequestCode) {
             if (resultCode == RESULT_OK) {
+                String time = data.getStringExtra(newItemResult);
+                Toast.makeText(MainActivity.this, getText(R.string.success_to_save_new_item) + time, Toast.LENGTH_LONG).show();
                 refreshRouteItems();
             }
+        } else {
+            Toast.makeText(MainActivity.this, getText(R.string.fail_to_save_new_item), Toast.LENGTH_SHORT).show();
         }
     }
 
