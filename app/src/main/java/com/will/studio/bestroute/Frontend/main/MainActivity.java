@@ -41,8 +41,7 @@ public class MainActivity extends AppCompatActivity
 
     private RouteDataManager routeDataManager;
     private String dir;
-    private final int newItemRequestCode = 1;
-    public static final String newItemResult = "new_item_return_result";
+
     private Activity currentActivity = null;
     private int currentItemIdx = 0;
 
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(newItemIntent, newItemRequestCode);
+                startActivityForResult(newItemIntent, CommonDefinitions.updateItemRequestCode);
             }
         });
 
@@ -116,26 +115,31 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.delete_item:
+                // TODO: delete alarm
                 routeItem.delete();
                 routeDataManager.restoreAllItems(dir);
                 refreshRouteItems();
                 return true;
             case R.id.edit_item:
-                return false;
+                Intent intent = new Intent(this, NewItemActivity.class);
+                intent.putExtra(CommonDefinitions.EXTRA_NAME_ROUTE_ITEM, routeItem);
+                startActivityForResult(intent, CommonDefinitions.updateItemRequestCode);
+                return true;
             case R.id.back_item:
                 return true;
             case R.id.call_google_map:
-                if (getDirectionAndShow(routeItem)) return true;
+                getDirectionAndShow(routeItem);
             default:
                 return super.onContextItemSelected(item);
         }
     }
 
-    private boolean getDirectionAndShow(final RouteItem routeItem) {
+    private void getDirectionAndShow(final RouteItem routeItem) {
         LatLng from = GoogleDirectionHelper.getLocationFromAddress(this, routeItem.getFrom());
         LatLng to = GoogleDirectionHelper.getLocationFromAddress(this, routeItem.getTo());
         if (from == null || to == null) {
-            return true;
+            Toast.makeText(MainActivity.this, getText(R.string.invalid_address), Toast.LENGTH_SHORT).show();
+            return;
         }
 
         // TODO: make them settable in new item activity
@@ -163,7 +167,6 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(MainActivity.this, getText(R.string.direction_failure), Toast.LENGTH_SHORT).show();
                     }
                 });
-        return false;
     }
 
     @Override
@@ -222,6 +225,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
             return true;
         } else if (id == R.id.action_delete_all_plans) {
+            //TODO: delete all alarms
             routeDataManager.deleteAllItems(dir);
             refreshRouteItems();
             return true;
@@ -230,7 +234,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -238,7 +241,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_addNewItem) {
             Intent newItemIntent = new Intent(this, NewItemActivity.class);
-            startActivityForResult(newItemIntent, newItemRequestCode);
+            startActivityForResult(newItemIntent, CommonDefinitions.updateItemRequestCode);
             return true;
 
         } else if (id == R.id.nav_manage) {
@@ -255,14 +258,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == newItemRequestCode) {
-            if (resultCode == RESULT_OK) {
-                String time = data.getStringExtra(newItemResult);
+        if (requestCode == CommonDefinitions.updateItemRequestCode) {
+            if (resultCode == CommonDefinitions.ACTIVITY_RESULT_OK) {
+                String time = data.getStringExtra(CommonDefinitions.updateItemResult);
                 Toast.makeText(MainActivity.this, getText(R.string.success_to_save_new_item) + time, Toast.LENGTH_LONG).show();
-                refreshRouteItems();
+            } else if (resultCode == CommonDefinitions.ACTIVITY_RESULT_NOK) {
+                Toast.makeText(MainActivity.this, getText(R.string.fail_to_save_new_item), Toast.LENGTH_SHORT).show();
+            } else if (resultCode == CommonDefinitions.ACTIVITY_RESULT_CANCEL) {
+
             }
-        } else {
-            Toast.makeText(MainActivity.this, getText(R.string.fail_to_save_new_item), Toast.LENGTH_SHORT).show();
+            refreshRouteItems();
         }
     }
 

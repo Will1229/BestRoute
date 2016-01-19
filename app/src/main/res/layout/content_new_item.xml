@@ -13,7 +13,6 @@
     tools:context=".frontend.main.NewItemActivity"
     tools:showIn="@layout/activity_new_item">
 
-
     <TableRow>
 
         <EditText
@@ -24,7 +23,6 @@
             android:hint="@string/new_item_from"
             android:inputType="text"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
     </TableRow>
 
     <TableRow>
@@ -37,7 +35,6 @@
             android:hint="@string/new_item_to"
             android:inputType="text"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
     </TableRow>
 
     <TableRow>

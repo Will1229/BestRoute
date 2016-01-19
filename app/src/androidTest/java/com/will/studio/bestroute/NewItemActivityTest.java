@@ -9,6 +9,7 @@ import com.will.studio.bestroute.frontend.main.NewItemActivity;
 
 /**
  * Created by egaozhi on 2016-01-04.
+ *
  */
 public class NewItemActivityTest extends ActivityInstrumentationTestCase2<NewItemActivity> {
 
@@ -18,7 +19,6 @@ public class NewItemActivityTest extends ActivityInstrumentationTestCase2<NewIte
     private TextView alarmText;
     private Button cancelButton;
     private Button saveButton;
-    private Button testButton;
     private Button previewButton;
 
     public NewItemActivityTest() {
@@ -35,7 +35,6 @@ public class NewItemActivityTest extends ActivityInstrumentationTestCase2<NewIte
         alarmText = (TextView) newItemActivity.findViewById(R.id.new_item_time);
         cancelButton = (Button) newItemActivity.findViewById(R.id.cancel_button);
         saveButton = (Button) newItemActivity.findViewById(R.id.save_button);
-        testButton = (Button) newItemActivity.findViewById(R.id.test_button);
         previewButton = (Button) newItemActivity.findViewById(R.id.preview_notification_button);
 
     }
@@ -47,8 +46,6 @@ public class NewItemActivityTest extends ActivityInstrumentationTestCase2<NewIte
         assertNotNull(alarmText);
         assertNotNull(cancelButton);
         assertNotNull(saveButton);
-        assertNotNull(testButton);
         assertNotNull(previewButton);
     }
-
 }

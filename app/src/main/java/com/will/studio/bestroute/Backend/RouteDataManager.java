@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 /**
  * Created by egaozhi on 2015-12-21.
+ *
  */
 public interface RouteDataManager {
 
-    boolean saveItem(String destDir, RouteItem newItem);
+    boolean saveItem(String destDir, RouteItem newItem, String path);
 
     RouteItem getItem(String srcDir);
 

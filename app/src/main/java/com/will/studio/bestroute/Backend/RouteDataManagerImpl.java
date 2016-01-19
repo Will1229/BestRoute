@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Created by egaozhi on 2015-12-21.
+ *
  */
 public class RouteDataManagerImpl implements RouteDataManager {
 
@@ -24,9 +25,11 @@ public class RouteDataManagerImpl implements RouteDataManager {
     }
 
     @Override
-    public boolean saveItem(String destDir, RouteItem newItem) {
-
-        String filePath = destDir + File.separator + itemPrefix + Long.toString(System.currentTimeMillis());
+    public boolean saveItem(String destDir, RouteItem newItem, String path) {
+        String filePath = path;
+        if (filePath == null || !filePath.contains(itemPrefix) || !filePath.contains(destDir)) {
+            filePath = destDir + File.separator + itemPrefix + Long.toString(System.currentTimeMillis());
+        }
         itemList.add(newItem);
         return newItem.writeToDisc(filePath);
     }
@@ -48,7 +51,6 @@ public class RouteDataManagerImpl implements RouteDataManager {
 
     @Override
     public RouteItem getItem(String destDir) {
-        // TODO
         return null;
     }
 
@@ -69,7 +71,9 @@ public class RouteDataManagerImpl implements RouteDataManager {
         for (File file : fileList
                 ) {
             RouteItem item = RouteItem.restoreFromDisc(file.getAbsolutePath());
-            itemList.add(item);
+            if (item != null) {
+                itemList.add(item);
+            }
         }
     }
 

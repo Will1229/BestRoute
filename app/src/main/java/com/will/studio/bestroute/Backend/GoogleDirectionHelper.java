@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by egaozhi on 2016-01-04.
+ *
  */
 public class GoogleDirectionHelper {
 
@@ -46,6 +47,9 @@ public class GoogleDirectionHelper {
         try {
             address = coder.getFromLocationName(strAddress, 1);
             if (address == null) {
+                return null;
+            }
+            if (address.size() <= 0) {
                 return null;
             }
             Address location = address.get(0);

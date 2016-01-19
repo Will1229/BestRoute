@@ -36,6 +36,7 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
+        // move to common definitions.
         routeItem = (RouteItem) getIntent().getSerializableExtra(MainActivity.ITEM_NAME);
         if (routeItem == null) {
             Toast.makeText(getApplicationContext(), "routeItem is null", Toast.LENGTH_SHORT).show();

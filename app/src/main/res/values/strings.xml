@@ -15,7 +15,7 @@
 
     <!-- Strings related to NewItemActivity -->
     <string name="new_item_toolbar_title">Add New Route Plan</string>
-    <string name="new_item_toast_fill_all_blanks">Please fill all blanks</string>
+    <string name="new_item_toast_fill_all_blanks">Unable to save. Please double check you input</string>
     <string name="show_route_button">Show Route</string>
     <string name="cancel_button">Cancel</string>
     <string name="save_button">Save</string>
@@ -24,6 +24,13 @@
     <string name="new_item_to">To</string>
     <string name="new_item_alarm">Alarm</string>
     <string name="new_item_null_time">--:--</string>
+    <string name="new_item_mon">Mo</string>
+    <string name="new_item_tue">Tu</string>
+    <string name="new_item_wed">We</string>
+    <string name="new_item_thu">Th</string>
+    <string name="new_item_fri">Fr</string>
+    <string name="new_item_sat">Sa</string>
+    <string name="new_item_sun">Su</string>
 
 
     <!-- Strings related to MainActivity -->
@@ -36,13 +43,16 @@
 
     <!-- Strings related to Notification -->
     <string name="notification_title">Your route plan is updated</string>
-    <string name="notification_content"></string>
+    <string name="notification_content">Empty</string>
     <string name="notification_ticker">Time to arrive </string>
+    <string name="notification_dismiss_button">Dismiss</string>
+    <string name="notification_navi_button">Start Navigation</string>
 
     <!-- Strings related to Google Direction -->
+    <string name="invalid_address">Unable to locate your from/to address</string>
     <string name="direction_ok">Direction OK</string>
-    <string name="direction_nok">Direction not OK</string>
-    <string name="direction_failure">Direction failed</string>
+    <string name="direction_nok">Unable to get direction. Is your from/to address correct?</string>
+    <string name="direction_failure">Unable to get direction. Check your network</string>
 
     <!-- Strings related to click_on_item menu -->
     <string name="edit">Edit</string>

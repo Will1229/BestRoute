@@ -7,6 +7,7 @@ import com.will.studio.bestroute.frontend.main.MainActivity;
 
 /**
  * Created by egaozhi on 2016-01-04.
+ *
  */
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
 

@@ -14,6 +14,7 @@ import java.io.Serializable;
 
 /**
  * Created by egaozhi on 2015-12-21.
+ *
  */
 public class RouteItem implements Serializable {
 
@@ -21,6 +22,11 @@ public class RouteItem implements Serializable {
     private String to;
     private String time;
     private String filePath;
+    private double fromLat = 0.0;
+    private double fromLng = 0.0;
+    private double toLat = 0.0;
+    private double toLng = 0.0;
+
 
     @Override
     public String toString() {
@@ -29,8 +35,45 @@ public class RouteItem implements Serializable {
                 ", to='" + to + '\'' +
                 ", time='" + time + '\'' +
                 ", filePath='" + filePath + '\'' +
+                ", fromLat=" + fromLat +
+                ", fromLng=" + fromLng +
+                ", toLat=" + toLat +
+                ", toLng=" + toLng +
                 '}';
     }
+
+    public double getFromLat() {
+        return fromLat;
+    }
+
+    public void setFromLat(double fromLat) {
+        this.fromLat = fromLat;
+    }
+
+    public double getFromLng() {
+        return fromLng;
+    }
+
+    public void setFromLng(double fromLng) {
+        this.fromLng = fromLng;
+    }
+
+    public double getToLat() {
+        return toLat;
+    }
+
+    public void setToLat(double toLat) {
+        this.toLat = toLat;
+    }
+
+    public double getToLng() {
+        return toLng;
+    }
+
+    public void setToLng(double toLng) {
+        this.toLng = toLng;
+    }
+
 
     public String getFilePath() {
         return filePath;
@@ -136,8 +179,4 @@ public class RouteItem implements Serializable {
         file.delete();
     }
 
-    public boolean getDirectionFromGoogle() {
-
-        return true;
-    }
 }
