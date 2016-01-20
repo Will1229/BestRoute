@@ -9,6 +9,7 @@ import android.util.Log;
 
 /**
  * Created by egaozhi on 2016-01-08.
+ *
  */
 public class NotificationReceiver extends BroadcastReceiver {
 

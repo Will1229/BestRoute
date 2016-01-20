@@ -1,6 +1,9 @@
 package com.will.studio.bestroute.frontend.main;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,14 +29,15 @@ import com.akexorcist.googledirection.constant.RequestResult;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.google.android.gms.maps.model.LatLng;
+import com.will.studio.bestroute.R;
 import com.will.studio.bestroute.backend.GoogleDirectionHelper;
 import com.will.studio.bestroute.backend.RouteDataManager;
 import com.will.studio.bestroute.backend.RouteDataManagerImpl;
 import com.will.studio.bestroute.backend.RouteItem;
 import com.will.studio.bestroute.frontend.settings.SettingsActivity;
-import com.will.studio.bestroute.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity
     private String dir;
 
     private Activity currentActivity = null;
+    private AlarmManager alarmMgr;
+    private PendingIntent pendingAlarmIntent;
     private int currentItemIdx = 0;
 
     public MainActivity() {
@@ -54,6 +61,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         currentActivity = this;
+        alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_current_items);
@@ -115,7 +123,8 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.delete_item:
-                // TODO: delete alarm
+                // TODO: hard coded request code.
+                cancelAlarm(0);
                 routeItem.delete();
                 routeDataManager.restoreAllItems(dir);
                 refreshRouteItems();
@@ -132,6 +141,33 @@ public class MainActivity extends AppCompatActivity
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    private void cancelAlarm(int requestCode) {
+        if (pendingAlarmIntent != null) {
+            Log.d(getClass().getName(), "cancel alarm requestCode = " + requestCode);
+            alarmMgr.cancel(pendingAlarmIntent);
+        }
+    }
+
+    private void scheduleAlarm(int hour, int minute, Intent intent, int requestCode) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+        // skip immediate alarm in case user sets a time in the past.
+        long alarmTime = calendar.getTimeInMillis();
+        if (alarmTime < System.currentTimeMillis()) {
+            calendar.setTimeInMillis(alarmTime + AlarmManager.INTERVAL_DAY);
+        }
+
+        // schedule notification intent
+        pendingAlarmIntent =
+                PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingAlarmIntent);
+        Log.d(getClass().getName(), "create alarm requestCode = " + requestCode);
     }
 
     private void getDirectionAndShow(final RouteItem routeItem) {
@@ -260,7 +296,14 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CommonDefinitions.updateItemRequestCode) {
             if (resultCode == CommonDefinitions.ACTIVITY_RESULT_OK) {
-                String time = data.getStringExtra(CommonDefinitions.updateItemResult);
+                String time = data.getStringExtra(CommonDefinitions.updateItemResultTime);
+                Intent intent = data.getParcelableExtra(CommonDefinitions.updateItemResultIntent);
+                // Set the alarm
+                String[] times = time.split(":");
+                int hour = Integer.parseInt(times[0]);
+                int minute = Integer.parseInt(times[1]);
+                scheduleAlarm(hour, minute, intent, 0);
+
                 Toast.makeText(MainActivity.this, getText(R.string.success_to_save_new_item) + time, Toast.LENGTH_LONG).show();
             } else if (resultCode == CommonDefinitions.ACTIVITY_RESULT_NOK) {
                 Toast.makeText(MainActivity.this, getText(R.string.fail_to_save_new_item), Toast.LENGTH_SHORT).show();
@@ -270,6 +313,4 @@ public class MainActivity extends AppCompatActivity
             refreshRouteItems();
         }
     }
-
-
 }

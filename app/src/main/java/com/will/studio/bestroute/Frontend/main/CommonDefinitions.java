@@ -2,6 +2,7 @@ package com.will.studio.bestroute.frontend.main;
 
 /**
  * Created by egaozhi on 2016-01-15.
+ *
  */
 public interface CommonDefinitions {
     String DISMISS_ACTION = "dismiss_action";
@@ -16,7 +17,8 @@ public interface CommonDefinitions {
     String EXTRA_NAME_ROUTE_ITEM = "route_item";
 
     int updateItemRequestCode = 1;
-    String updateItemResult = "new_item_return_result";
+    String updateItemResultTime = "new_item_return_result_time";
+    String updateItemResultIntent = "new_item_return_result_intent";
 
     int ACTIVITY_RESULT_OK = 1;
     int ACTIVITY_RESULT_NOK = 2;

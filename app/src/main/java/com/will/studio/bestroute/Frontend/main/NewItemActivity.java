@@ -1,6 +1,5 @@
 package com.will.studio.bestroute.frontend.main;
 
-import android.app.AlarmManager;
 import android.app.DialogFragment;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -27,8 +26,6 @@ import com.will.studio.bestroute.backend.GoogleDirectionHelper;
 import com.will.studio.bestroute.backend.RouteDataManager;
 import com.will.studio.bestroute.backend.RouteDataManagerImpl;
 import com.will.studio.bestroute.backend.RouteItem;
-
-import java.util.Calendar;
 
 public class NewItemActivity extends AppCompatActivity {
 
@@ -143,8 +140,9 @@ public class NewItemActivity extends AppCompatActivity {
 
             Intent returnIntent = new Intent();
             if (success) {
-                scheduleNotification(newItem);
-                returnIntent.putExtra(CommonDefinitions.updateItemResult, newItem.getTime());
+                Intent notificationIntent = scheduleNotification(newItem);
+                returnIntent.putExtra(CommonDefinitions.updateItemResultTime, newItem.getTime());
+                returnIntent.putExtra(CommonDefinitions.updateItemResultIntent, notificationIntent);
                 setResult(CommonDefinitions.ACTIVITY_RESULT_OK, returnIntent);
                 return true;
             } else {
@@ -163,7 +161,7 @@ public class NewItemActivity extends AppCompatActivity {
             }
         }
 
-        private void scheduleNotification(RouteItem routeItem) {
+        private Intent scheduleNotification(RouteItem routeItem) {
 
             //build notification builder
             String content = "From " + routeItem.getFrom() + " to " + routeItem.getTo();
@@ -200,11 +198,8 @@ public class NewItemActivity extends AppCompatActivity {
             intent.putExtra(CommonDefinitions.NOTIFICATION_ID, CommonDefinitions.NOTIFICATION_ID_VALUE);
             intent.putExtra(CommonDefinitions.NOTIFICATION_NAME, notification);
             intent.setAction(CommonDefinitions.ROUTE_ALARM_ACTION);
-            PendingIntent pendingAlarmIntent =
-                    PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            // Set the alarm
-            scheduleAlarm(routeItem, pendingAlarmIntent);
+            return intent;
         }
 
         private void addNaviAction(NotificationCompat.Builder notificationBuilder) {
@@ -220,28 +215,6 @@ public class NewItemActivity extends AppCompatActivity {
             PendingIntent pendingDismissIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             notificationBuilder.addAction(0, getResources().getString(R.string.notification_dismiss_button), pendingDismissIntent);
         }
-
-        private void scheduleAlarm(RouteItem routeItem, PendingIntent pendingIntent) {
-            String[] times = routeItem.getTime().split(":");
-            int hour = Integer.parseInt(times[0]);
-            int minute = Integer.parseInt(times[1]);
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, hour);
-            calendar.set(Calendar.MINUTE, minute);
-
-            long alarmTime = calendar.getTimeInMillis();
-            if (alarmTime < System.currentTimeMillis()) {
-                calendar.setTimeInMillis(alarmTime + AlarmManager.INTERVAL_DAY);
-            }
-
-            // schedule notification intent
-            AlarmManager alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, pendingIntent);
-        }
-
     }
 
     private RouteItem readFromAllText() {
