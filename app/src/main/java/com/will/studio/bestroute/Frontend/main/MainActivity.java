@@ -2,12 +2,18 @@ package com.will.studio.bestroute.frontend.main;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -124,7 +130,7 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.delete_item:
                 // TODO: hard coded request code.
-                cancelAlarm(0);
+                cancelAlarm(routeItem);
                 routeItem.delete();
                 routeDataManager.restoreAllItems(dir);
                 refreshRouteItems();
@@ -143,14 +149,22 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void cancelAlarm(int requestCode) {
-        if (pendingAlarmIntent != null) {
-            Log.d(getClass().getName(), "cancel alarm requestCode = " + requestCode);
-            alarmMgr.cancel(pendingAlarmIntent);
+    private void cancelAlarm(RouteItem routeItem) {
+        int requestCode = 0;
+        if (pendingAlarmIntent == null) {
+            Intent intent = buildNotificationIntent(routeItem);
+            pendingAlarmIntent =
+                    PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
+        Log.d(getClass().getName(), "cancel alarm requestCode = " + requestCode);
+        alarmMgr.cancel(pendingAlarmIntent);
     }
 
-    private void scheduleAlarm(int hour, int minute, Intent intent, int requestCode) {
+    private void scheduleAlarm(RouteItem routeItem) {
+        String[] times = routeItem.getTime().split(":");
+        int hour = Integer.parseInt(times[0]);
+        int minute = Integer.parseInt(times[1]);
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -162,7 +176,8 @@ public class MainActivity extends AppCompatActivity
             calendar.setTimeInMillis(alarmTime + AlarmManager.INTERVAL_DAY);
         }
 
-        // schedule notification intent
+        int requestCode = 0;
+        Intent intent = buildNotificationIntent(routeItem);
         pendingAlarmIntent =
                 PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
@@ -296,21 +311,82 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CommonDefinitions.updateItemRequestCode) {
             if (resultCode == CommonDefinitions.ACTIVITY_RESULT_OK) {
-                String time = data.getStringExtra(CommonDefinitions.updateItemResultTime);
-                Intent intent = data.getParcelableExtra(CommonDefinitions.updateItemResultIntent);
-                // Set the alarm
-                String[] times = time.split(":");
-                int hour = Integer.parseInt(times[0]);
-                int minute = Integer.parseInt(times[1]);
-                scheduleAlarm(hour, minute, intent, 0);
-
-                Toast.makeText(MainActivity.this, getText(R.string.success_to_save_new_item) + time, Toast.LENGTH_LONG).show();
+                RouteItem routeItem = (RouteItem) data.getSerializableExtra(CommonDefinitions.updatedRouteItem);
+                new ScheduleAlarmsTask().execute(routeItem);
+                Toast.makeText(MainActivity.this, getText(R.string.success_to_save_new_item) + routeItem.getTime(), Toast.LENGTH_LONG).show();
             } else if (resultCode == CommonDefinitions.ACTIVITY_RESULT_NOK) {
                 Toast.makeText(MainActivity.this, getText(R.string.fail_to_save_new_item), Toast.LENGTH_SHORT).show();
             } else if (resultCode == CommonDefinitions.ACTIVITY_RESULT_CANCEL) {
-
+                return;
             }
             refreshRouteItems();
+        }
+    }
+
+    private Intent buildNotificationIntent(RouteItem routeItem) {
+
+        //build notification builder
+        String content = "From " + routeItem.getFrom() + " to " + routeItem.getTo();
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(getApplicationContext())
+                        .setSmallIcon(R.drawable.cast_ic_notification_0)
+                        .setContentTitle(getText(R.string.notification_title))
+                        .setContentText(content)
+                        .setTicker(getText(R.string.notification_ticker))
+                        .setSound(alarmSound)
+                        .setAutoCancel(true);
+
+        addNaviAction(notificationBuilder);
+        addDismissAction(notificationBuilder);
+
+        //build map intent into notification
+        Intent mapIntent = new Intent(getApplicationContext(), MapViewActivity.class);
+        mapIntent.putExtra(MainActivity.ITEM_NAME, routeItem);
+        mapIntent.setAction(CommonDefinitions.MAP_VIEW_ACTION);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+        stackBuilder.addParentStack(MapViewActivity.class);
+        stackBuilder.addNextIntent(mapIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        notificationBuilder.setContentIntent(resultPendingIntent);
+
+        // build notification into notification intent
+        Notification notification = notificationBuilder.build();
+        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        intent.putExtra(CommonDefinitions.NOTIFICATION_ID, CommonDefinitions.NOTIFICATION_ID_VALUE);
+        intent.putExtra(CommonDefinitions.NOTIFICATION_NAME, notification);
+        intent.setAction(CommonDefinitions.ROUTE_ALARM_ACTION);
+
+        return intent;
+    }
+
+    private void addNaviAction(NotificationCompat.Builder notificationBuilder) {
+        Intent naviIntent = new Intent();
+        naviIntent.setAction(CommonDefinitions.NAVI_ACTION);
+        PendingIntent pendingNaviIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, naviIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notificationBuilder.addAction(0, getResources().getString(R.string.notification_navi_button), pendingNaviIntent);
+    }
+
+    private void addDismissAction(NotificationCompat.Builder notificationBuilder) {
+        Intent dismissIntent = new Intent();
+        dismissIntent.setAction(CommonDefinitions.DISMISS_ACTION);
+        PendingIntent pendingDismissIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notificationBuilder.addAction(0, getResources().getString(R.string.notification_dismiss_button), pendingDismissIntent);
+    }
+
+    private class ScheduleAlarmsTask extends AsyncTask<RouteItem, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(RouteItem... routeItems) {
+            for (RouteItem item : routeItems
+                    ) {
+                scheduleAlarm(item);
+            }
+            return null;
         }
     }
 }

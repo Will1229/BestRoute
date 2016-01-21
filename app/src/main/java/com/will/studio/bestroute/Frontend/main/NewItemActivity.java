@@ -1,7 +1,6 @@
 package com.will.studio.bestroute.frontend.main;
 
 import android.app.DialogFragment;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -30,7 +29,7 @@ import com.will.studio.bestroute.backend.RouteItem;
 public class NewItemActivity extends AppCompatActivity {
 
     public static final String TAG = NewItemActivity.class.getSimpleName();
-    private RouteItem routeItem;
+    private RouteItem existingRouteItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +39,9 @@ public class NewItemActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.new_item_toolbar_title);
         setSupportActionBar(toolbar);
 
-        routeItem = (RouteItem) getIntent().getSerializableExtra(CommonDefinitions.EXTRA_NAME_ROUTE_ITEM);
-        if (routeItem != null) {
-            fillBlanks(routeItem);
+        existingRouteItem = (RouteItem) getIntent().getSerializableExtra(CommonDefinitions.EXTRA_NAME_ROUTE_ITEM);
+        if (existingRouteItem != null) {
+            fillBlanks(existingRouteItem);
         }
 
     }
@@ -103,7 +102,7 @@ public class NewItemActivity extends AppCompatActivity {
     }
 
     public void onClickCancelButton(View view) {
-        routeItem = null;
+        existingRouteItem = null;
         Intent returnIntent = new Intent();
         setResult(CommonDefinitions.ACTIVITY_RESULT_CANCEL, returnIntent);
         finish();
@@ -117,7 +116,6 @@ public class NewItemActivity extends AppCompatActivity {
             if (newItem == null) {
                 return false;
             }
-
             LatLng from = GoogleDirectionHelper.getLocationFromAddress(getApplicationContext(), newItem.getFrom());
             LatLng to = GoogleDirectionHelper.getLocationFromAddress(getApplicationContext(), newItem.getTo());
 
@@ -133,16 +131,14 @@ public class NewItemActivity extends AppCompatActivity {
             RouteDataManager routeDataManager = new RouteDataManagerImpl();
             String dir = getApplicationContext().getFilesDir().getAbsolutePath();
             String filePath = null;
-            if (routeItem != null) { // edit existing item
-                filePath = routeItem.getFilePath();
+            if (existingRouteItem != null) { // edit existing item
+                filePath = existingRouteItem.getFilePath();
             }
             boolean success = routeDataManager.saveItem(dir, newItem, filePath);
 
             Intent returnIntent = new Intent();
             if (success) {
-                Intent notificationIntent = scheduleNotification(newItem);
-                returnIntent.putExtra(CommonDefinitions.updateItemResultTime, newItem.getTime());
-                returnIntent.putExtra(CommonDefinitions.updateItemResultIntent, notificationIntent);
+                returnIntent.putExtra(CommonDefinitions.updatedRouteItem, newItem);
                 setResult(CommonDefinitions.ACTIVITY_RESULT_OK, returnIntent);
                 return true;
             } else {
@@ -159,61 +155,6 @@ public class NewItemActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), R.string.new_item_toast_fill_all_blanks, Toast.LENGTH_SHORT).show();
             }
-        }
-
-        private Intent scheduleNotification(RouteItem routeItem) {
-
-            //build notification builder
-            String content = "From " + routeItem.getFrom() + " to " + routeItem.getTo();
-            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            NotificationCompat.Builder notificationBuilder =
-                    new NotificationCompat.Builder(getApplicationContext())
-                            .setSmallIcon(R.drawable.cast_ic_notification_0)
-                            .setContentTitle(getText(R.string.notification_title))
-                            .setContentText(content)
-                            .setTicker(getText(R.string.notification_ticker))
-                            .setSound(alarmSound)
-                            .setAutoCancel(true);
-
-            addNaviAction(notificationBuilder);
-            addDismissAction(notificationBuilder);
-
-            //build map intent into notification
-            Intent mapIntent = new Intent(getApplicationContext(), MapViewActivity.class);
-            mapIntent.putExtra(MainActivity.ITEM_NAME, routeItem);
-            mapIntent.setAction(CommonDefinitions.MAP_VIEW_ACTION);
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
-            stackBuilder.addParentStack(MapViewActivity.class);
-            stackBuilder.addNextIntent(mapIntent);
-            PendingIntent resultPendingIntent =
-                    stackBuilder.getPendingIntent(
-                            0,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
-            notificationBuilder.setContentIntent(resultPendingIntent);
-
-            // build notification into notification intent
-            Notification notification = notificationBuilder.build();
-            Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
-            intent.putExtra(CommonDefinitions.NOTIFICATION_ID, CommonDefinitions.NOTIFICATION_ID_VALUE);
-            intent.putExtra(CommonDefinitions.NOTIFICATION_NAME, notification);
-            intent.setAction(CommonDefinitions.ROUTE_ALARM_ACTION);
-
-            return intent;
-        }
-
-        private void addNaviAction(NotificationCompat.Builder notificationBuilder) {
-            Intent naviIntent = new Intent();
-            naviIntent.setAction(CommonDefinitions.NAVI_ACTION);
-            PendingIntent pendingNaviIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, naviIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            notificationBuilder.addAction(0, getResources().getString(R.string.notification_navi_button), pendingNaviIntent);
-        }
-
-        private void addDismissAction(NotificationCompat.Builder notificationBuilder) {
-            Intent dismissIntent = new Intent();
-            dismissIntent.setAction(CommonDefinitions.DISMISS_ACTION);
-            PendingIntent pendingDismissIntent = PendingIntent.getBroadcast(getApplicationContext(), 1, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            notificationBuilder.addAction(0, getResources().getString(R.string.notification_dismiss_button), pendingDismissIntent);
         }
     }
 
