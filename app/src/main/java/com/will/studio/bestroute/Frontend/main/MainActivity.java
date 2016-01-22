@@ -38,7 +38,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.will.studio.bestroute.R;
 import com.will.studio.bestroute.backend.GoogleDirectionHelper;
 import com.will.studio.bestroute.backend.RouteDataManager;
-import com.will.studio.bestroute.backend.RouteDataManagerImpl;
 import com.will.studio.bestroute.backend.RouteItem;
 import com.will.studio.bestroute.frontend.settings.SettingsActivity;
 
@@ -51,16 +50,10 @@ public class MainActivity extends AppCompatActivity
     public static final String ITEM_NAME = "current_route_item";
 
     private RouteDataManager routeDataManager;
-    private String dir;
-
     private Activity currentActivity = null;
     private AlarmManager alarmMgr;
     private PendingIntent pendingAlarmIntent;
     private int currentItemIdx = 0;
-
-    public MainActivity() {
-        routeDataManager = new RouteDataManagerImpl();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +84,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        dir = getApplicationContext().getFilesDir().getAbsolutePath();
-        routeDataManager.restoreAllItems(dir);
+        String dirPath = getApplicationContext().getFilesDir().getAbsolutePath();
+        routeDataManager = new RouteDataManager(dirPath);
+        routeDataManager.restoreAllItemsFromDisc();
 
         refreshRouteItems();
 
@@ -124,18 +118,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         super.onContextItemSelected(item);
-        ArrayList<RouteItem> itemList = routeDataManager.getAllItems(dir);
+        ArrayList<RouteItem> itemList = routeDataManager.getAllItems();
         final RouteItem routeItem = itemList.get(currentItemIdx);
 
         switch (item.getItemId()) {
             case R.id.delete_item:
-                // TODO: hard coded request code.
                 cancelAlarm(routeItem);
-                routeItem.delete();
-                routeDataManager.restoreAllItems(dir);
+                routeDataManager.deleteItem(routeItem.getFilePath());
+                routeDataManager.restoreAllItemsFromDisc();
                 refreshRouteItems();
                 return true;
             case R.id.edit_item:
+                cancelAlarm(routeItem);
                 Intent intent = new Intent(this, NewItemActivity.class);
                 intent.putExtra(CommonDefinitions.EXTRA_NAME_ROUTE_ITEM, routeItem);
                 startActivityForResult(intent, CommonDefinitions.updateItemRequestCode);
@@ -150,7 +144,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void cancelAlarm(RouteItem routeItem) {
-        int requestCode = 0;
+        int requestCode = routeItem.getAlarmRequestCode();
         if (pendingAlarmIntent == null) {
             Intent intent = buildNotificationIntent(routeItem);
             pendingAlarmIntent =
@@ -176,7 +170,7 @@ public class MainActivity extends AppCompatActivity
             calendar.setTimeInMillis(alarmTime + AlarmManager.INTERVAL_DAY);
         }
 
-        int requestCode = 0;
+        int requestCode = routeItem.getAlarmRequestCode();
         Intent intent = buildNotificationIntent(routeItem);
         pendingAlarmIntent =
                 PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -223,12 +217,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        routeDataManager.restoreAllItems(dir);
+        routeDataManager.restoreAllItemsFromDisc();
         refreshRouteItems();
     }
 
     private void refreshRouteItems() {
-        ArrayList<RouteItem> itemList = routeDataManager.getAllItems(dir);
+        ArrayList<RouteItem> itemList = routeDataManager.getAllItems();
         ArrayList<String> itemHeadlineList = new ArrayList<>();
 
         for (RouteItem i : itemList
@@ -277,7 +271,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.action_delete_all_plans) {
             //TODO: delete all alarms
-            routeDataManager.deleteAllItems(dir);
+            routeDataManager.deleteAllItems();
             refreshRouteItems();
             return true;
         }

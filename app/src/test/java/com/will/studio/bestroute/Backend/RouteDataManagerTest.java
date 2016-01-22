@@ -1,5 +1,7 @@
 package com.will.studio.bestroute.backend;
 
+import android.util.Log;
+
 import junit.framework.TestCase;
 
 import java.io.File;
@@ -8,12 +10,13 @@ import java.util.ArrayList;
 
 /**
  * Created by egaozhi on 2015-12-21.
+ * Project: BestRoute
  */
-public class RouteDataManagerImplTest extends TestCase {
+public class RouteDataManagerTest extends TestCase {
 
     private RouteDataManager routeDataManager;
-    private String testDirPath;
     private File testDir;
+    private String testDirPath;
 
     @Override
     protected void setUp() throws Exception {
@@ -35,18 +38,20 @@ public class RouteDataManagerImplTest extends TestCase {
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-        testDir.delete();
+        if (!testDir.delete()) {
+            Log.d(getClass().getName(), "Cannot delete " + testDir.toString());
+        }
     }
 
 
-    public RouteDataManagerImplTest() {
-        routeDataManager = new RouteDataManagerImpl();
+    public RouteDataManagerTest() {
         testDirPath = System.getProperty("user.home") + File.separator + "AndroidTestDir";
         testDir = new File(testDirPath);
+        routeDataManager = new RouteDataManager(testDirPath);
     }
 
     public void testSaveAndReadAndEditOneItem() throws IOException {
-
+        // New
         String from = "from place 111";
         String to = "to place 222";
         String time = "11:30";
@@ -63,52 +68,45 @@ public class RouteDataManagerImplTest extends TestCase {
 
         assertNull(inputItem.getFilePath());
 
-        routeDataManager.saveItem(testDirPath, inputItem, null);
+        int requestCode1 = inputItem.getAlarmRequestCode();
+        assertNotNull(requestCode1);
+        routeDataManager.saveItem(inputItem, null);
 
         String filePath = inputItem.getFilePath();
         assertNotNull(filePath);
 
         File[] files = testDir.listFiles();
         assertEquals(1, files.length);
-        RouteItem outputItem = routeDataManager.restoreItem(files[0].getAbsolutePath());
-        assertEquals(inputItem.getFrom(), outputItem.getFrom());
-        assertEquals(inputItem.getTo(), outputItem.getTo());
-        assertEquals(inputItem.getTime(), outputItem.getTime());
-        assertEquals(filePath, outputItem.getFilePath());
-        assertEquals(fromLat, outputItem.getFromLat());
-        assertEquals(fromLng, outputItem.getFromLng());
-        assertEquals(toLat, outputItem.getToLat());
-        assertEquals(toLng, outputItem.getToLng());
+        RouteItem outputItem = routeDataManager.restoreItemFromDisc(files[0].getAbsolutePath());
+        assertEquals(inputItem, outputItem);
 
-
+        // Edit
+        filePath = inputItem.getFilePath();
         from = "from place 222";
         to = "to place 333";
         time = "11:33";
-        inputItem.setFrom(from);
-        inputItem.setTo(to);
-        inputItem.setTime(time);
-        filePath = inputItem.getFilePath();
+        inputItem = new RouteItem(from, to, time);
 
-        routeDataManager.saveItem(testDirPath, inputItem, filePath);
+        inputItem.setFromLat(fromLat);
+        inputItem.setFromLng(fromLng);
+        inputItem.setToLat(toLat);
+        inputItem.setToLng(toLng);
+
+        int requestCode2 = inputItem.getAlarmRequestCode();
+        assertTrue(requestCode1 != requestCode2);
+        routeDataManager.saveItem(inputItem, filePath);
 
         files = testDir.listFiles();
         assertEquals(1, files.length);
-        outputItem = routeDataManager.restoreItem(files[0].getAbsolutePath());
-        assertEquals(inputItem.getFrom(), outputItem.getFrom());
-        assertEquals(inputItem.getTo(), outputItem.getTo());
-        assertEquals(inputItem.getTime(), outputItem.getTime());
-        assertEquals(filePath, outputItem.getFilePath());
-        assertEquals(fromLat, outputItem.getFromLat());
-        assertEquals(fromLng, outputItem.getFromLng());
-        assertEquals(toLat, outputItem.getToLat());
-        assertEquals(toLng, outputItem.getToLng());
+        outputItem = routeDataManager.restoreItemFromDisc(files[0].getAbsolutePath());
+        assertEquals(inputItem, outputItem);
 
         if (!files[0].delete()) {
             fail();
         }
     }
 
-    public void testReadAllData() throws Exception {
+    public void testSaveAndRestoreAndDeleteAllItems() throws Exception {
         final int loop = 3;
         String from = "from place 111";
         String to = "to place 222";
@@ -116,13 +114,21 @@ public class RouteDataManagerImplTest extends TestCase {
         RouteItem inputItem = new RouteItem(from, to, time);
 
         for (int i = 0; i < loop; ++i) {
-            routeDataManager.saveItem(testDirPath, inputItem, null);
+            routeDataManager.saveItem(inputItem, null);
         }
 
-        ArrayList<RouteItem> itemArrayList = routeDataManager.getAllItems(testDirPath);
+        ArrayList<RouteItem> itemArrayList = routeDataManager.getAllItems();
         File[] files = testDir.listFiles();
         assertEquals(loop, files.length);
         assertEquals(loop, itemArrayList.size());
+
+        RouteDataManager anotherRouteDataManager = new RouteDataManager(testDirPath);
+        anotherRouteDataManager.restoreAllItemsFromDisc();
+        itemArrayList = routeDataManager.getAllItems();
+        files = testDir.listFiles();
+        assertEquals(loop, files.length);
+        assertEquals(loop, itemArrayList.size());
+
     }
 
 }

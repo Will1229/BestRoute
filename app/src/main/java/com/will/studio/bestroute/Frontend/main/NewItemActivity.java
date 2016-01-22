@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.will.studio.bestroute.R;
 import com.will.studio.bestroute.backend.GoogleDirectionHelper;
 import com.will.studio.bestroute.backend.RouteDataManager;
-import com.will.studio.bestroute.backend.RouteDataManagerImpl;
 import com.will.studio.bestroute.backend.RouteItem;
 
 public class NewItemActivity extends AppCompatActivity {
@@ -128,13 +127,13 @@ public class NewItemActivity extends AppCompatActivity {
             newItem.setToLat(to.latitude);
             newItem.setToLng(to.longitude);
 
-            RouteDataManager routeDataManager = new RouteDataManagerImpl();
-            String dir = getApplicationContext().getFilesDir().getAbsolutePath();
+            String dirPath = getApplicationContext().getFilesDir().getAbsolutePath();
+            RouteDataManager routeDataManager = new RouteDataManager(dirPath);
             String filePath = null;
             if (existingRouteItem != null) { // edit existing item
                 filePath = existingRouteItem.getFilePath();
             }
-            boolean success = routeDataManager.saveItem(dir, newItem, filePath);
+            boolean success = routeDataManager.saveItem(newItem, filePath);
 
             Intent returnIntent = new Intent();
             if (success) {
