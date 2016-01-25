@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main;
+package com.will.studio.bestroute.frontend.main.Receivers;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,42 +7,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.will.studio.bestroute.frontend.main.Constants;
+
 /**
  * Created by egaozhi on 2016-01-08.
- *
+ * Project: BestRoute
  */
 public class NotificationReceiver extends BroadcastReceiver {
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        String action = intent.getAction();
-
-        Log.d(getClass().getName(), "Received a broadcast with action: " + action);
-
-        if (action == null) {
-            return;
-        }
-
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        int id = intent.getIntExtra(CommonDefinitions.NOTIFICATION_ID, 0);
-        Notification notification = intent.getParcelableExtra(CommonDefinitions.NOTIFICATION_NAME);
-
-        switch (action) {
-            case CommonDefinitions.ROUTE_ALARM_ACTION: {
-                notificationManager.notify(id, notification);
-                break;
-            }
-            case CommonDefinitions.NAVI_ACTION:
-
-                break;
-            case CommonDefinitions.DISMISS_ACTION: {
-                Log.d(getClass().getName(), "In dismiss action!");
-                notificationManager.cancel(id);
-                break;
-            }
-        }
+        int id = intent.getIntExtra(Constants.NOTIFICATION_ID, 0);
+        Notification notification = intent.getParcelableExtra(Constants.NOTIFICATION_NAME);
+        notificationManager.notify(id, notification);
+        Log.d(getClass().getName(), "Received a broadcast with id: " + id);
 
 //        RouteItem routeItem = (RouteItem) intent.getSerializableExtra(ROUTE_ITEM);
 //

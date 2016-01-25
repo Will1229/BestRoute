@@ -63,10 +63,8 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
 
         Route route = direction.getRouteList().get(0);
         TextView view = (TextView) findViewById(R.id.map_view_text);
-        String summary = new StringBuilder()
-                .append("If you leave now you will arrive destination in ")
-                .append(route.getLegList().get(0).getDuration().getText())
-                .toString();
+        String summary = "If you leave now you will arrive destination in "
+                + route.getLegList().get(0).getDuration().getText();
         view.setText(summary);
 
         Leg leg = direction.getRouteList().get(0).getLegList().get(0);

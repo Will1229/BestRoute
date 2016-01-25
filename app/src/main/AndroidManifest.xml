@@ -41,14 +41,15 @@
 
         <activity android:name=".frontend.main.MapViewActivity"></activity>
 
-        <receiver android:name=".frontend.main.BootReceiver"
+        <receiver android:name=".frontend.main.Receivers.BootReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
-        <receiver android:name=".frontend.main.NotificationReceiver" />
-
+        <receiver android:name=".frontend.main.Receivers.NotificationReceiver" />
+        <receiver android:name=".frontend.main.Receivers.DismissReceiver"/>
+        <receiver android:name=".frontend.main.Receivers.NaviReceiver" />
     </application>
 
 </manifest>

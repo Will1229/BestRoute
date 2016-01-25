@@ -46,7 +46,7 @@
     <string name="notification_content">Empty</string>
     <string name="notification_ticker">Time to arrive </string>
     <string name="notification_dismiss_button">Dismiss</string>
-    <string name="notification_navi_button">Start Navigation</string>
+    <string name="notification_navi_button">Navigate</string>
 
     <!-- Strings related to Google Direction -->
     <string name="invalid_address">Unable to locate your from/to address</string>

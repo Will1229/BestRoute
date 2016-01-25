@@ -38,7 +38,7 @@ public class NewItemActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.new_item_toolbar_title);
         setSupportActionBar(toolbar);
 
-        existingRouteItem = (RouteItem) getIntent().getSerializableExtra(CommonDefinitions.EXTRA_NAME_ROUTE_ITEM);
+        existingRouteItem = (RouteItem) getIntent().getSerializableExtra(Constants.EXTRA_NAME_ROUTE_ITEM);
         if (existingRouteItem != null) {
             fillBlanks(existingRouteItem);
         }
@@ -103,7 +103,7 @@ public class NewItemActivity extends AppCompatActivity {
     public void onClickCancelButton(View view) {
         existingRouteItem = null;
         Intent returnIntent = new Intent();
-        setResult(CommonDefinitions.ACTIVITY_RESULT_CANCEL, returnIntent);
+        setResult(Constants.ACTIVITY_RESULT_CANCEL, returnIntent);
         finish();
     }
 
@@ -137,11 +137,11 @@ public class NewItemActivity extends AppCompatActivity {
 
             Intent returnIntent = new Intent();
             if (success) {
-                returnIntent.putExtra(CommonDefinitions.updatedRouteItem, newItem);
-                setResult(CommonDefinitions.ACTIVITY_RESULT_OK, returnIntent);
+                returnIntent.putExtra(Constants.UPDATED_ROUTE_ITEM, newItem);
+                setResult(Constants.ACTIVITY_RESULT_OK, returnIntent);
                 return true;
             } else {
-                setResult(CommonDefinitions.ACTIVITY_RESULT_NOK, returnIntent);
+                setResult(Constants.ACTIVITY_RESULT_NOK, returnIntent);
             }
             return false;
         }

@@ -2,22 +2,19 @@ package com.will.studio.bestroute.frontend.main;
 
 /**
  * Created by egaozhi on 2016-01-15.
- *
+ * Project: BestRoute
  */
-public interface CommonDefinitions {
-    String DISMISS_ACTION = "dismiss_action";
-    String NAVI_ACTION = "navi_action";
-    String MAP_VIEW_ACTION = "map_view_action";
-    String ROUTE_ALARM_ACTION = "route_alarm_action";
-
+public interface Constants {
     String NOTIFICATION_ID = "notification_id";
     int NOTIFICATION_ID_VALUE = 1;
     String NOTIFICATION_NAME = "notification";
 
     String EXTRA_NAME_ROUTE_ITEM = "route_item";
 
-    int updateItemRequestCode = 1;
-    String updatedRouteItem = "updated_route_item";
+    int NOTIFICATION_REQUEST_CODE = 1;
+    int UPDATE_ITEM_REQUEST_CODE = 2;
+
+    String UPDATED_ROUTE_ITEM = "updated_route_item";
 
     int ACTIVITY_RESULT_OK = 1;
     int ACTIVITY_RESULT_NOK = 2;
