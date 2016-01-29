@@ -12,14 +12,14 @@ import java.util.List;
 
 /**
  * Created by egaozhi on 2016-01-04.
- *
+ * Project: BestRoute
  */
 public class GoogleDirectionHelper {
 
     public static final String CLASS_NAME = "GoogleDirectionHelper";
     private static Direction direction;
-    private static CommonDefinitions.DirectionStatus status = CommonDefinitions.DirectionStatus.NOTSTART;
-
+    private static CommonDefinitions.DirectionStatus status = CommonDefinitions.DirectionStatus
+            .NOTSTART;
 
     public static CommonDefinitions.DirectionStatus getStatus() {
         return status;
@@ -30,11 +30,9 @@ public class GoogleDirectionHelper {
         Log.d(CLASS_NAME, "setStatus to " + GoogleDirectionHelper.status);
     }
 
-
     public static Direction getDirection() {
         return direction;
     }
-
 
     public static void setDirection(Direction inDirection) {
         direction = inDirection;

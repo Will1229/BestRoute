@@ -19,7 +19,6 @@ public class NewItemActivityTest extends ActivityInstrumentationTestCase2<NewIte
     private TextView alarmText;
     private Button cancelButton;
     private Button saveButton;
-    private Button previewButton;
 
     public NewItemActivityTest() {
         super(NewItemActivity.class);
@@ -35,7 +34,6 @@ public class NewItemActivityTest extends ActivityInstrumentationTestCase2<NewIte
         alarmText = (TextView) newItemActivity.findViewById(R.id.new_item_time);
         cancelButton = (Button) newItemActivity.findViewById(R.id.cancel_button);
         saveButton = (Button) newItemActivity.findViewById(R.id.save_button);
-        previewButton = (Button) newItemActivity.findViewById(R.id.preview_notification_button);
 
     }
 
@@ -46,6 +44,5 @@ public class NewItemActivityTest extends ActivityInstrumentationTestCase2<NewIte
         assertNotNull(alarmText);
         assertNotNull(cancelButton);
         assertNotNull(saveButton);
-        assertNotNull(previewButton);
     }
 }

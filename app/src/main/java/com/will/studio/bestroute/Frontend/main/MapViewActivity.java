@@ -21,9 +21,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.will.studio.bestroute.R;
 import com.will.studio.bestroute.backend.GoogleDirectionHelper;
 import com.will.studio.bestroute.backend.RouteItem;
-import com.will.studio.bestroute.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +37,14 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_view);
         // move to common definitions.
-        routeItem = (RouteItem) getIntent().getSerializableExtra(MainActivity.ITEM_NAME);
+        routeItem = (RouteItem) getIntent().getSerializableExtra(Constants.EXTRA_NAME_ROUTE_ITEM);
         if (routeItem == null) {
             Toast.makeText(getApplicationContext(), "routeItem is null", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_view);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id
+                .map_view);
         mapFragment.getMapAsync(this);
 
     }
@@ -53,21 +54,24 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
 
         Direction direction = GoogleDirectionHelper.getDirection();
         if (direction == null) {
-            Toast.makeText(getApplicationContext(), getText(R.string.direction_failure), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getText(R.string.direction_failure), Toast
+                    .LENGTH_SHORT).show();
             return;
         }
         if (!direction.getStatus().equals(RequestResult.OK)) {
-            Toast.makeText(getApplicationContext(), getText(R.string.direction_nok), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getText(R.string.direction_nok), Toast
+                    .LENGTH_SHORT).show();
             return;
         }
 
         Route route = direction.getRouteList().get(0);
         TextView view = (TextView) findViewById(R.id.map_view_text);
-        String summary = "If you leave now you will arrive destination in "
-                + route.getLegList().get(0).getDuration().getText();
-        view.setText(summary);
 
         Leg leg = direction.getRouteList().get(0).getLegList().get(0);
+        String durationInTraffic = leg.getDurationInTraffic().getText();
+        String summary = "If you leave now you will arrive destination in " + durationInTraffic;
+        view.setText(summary);
+
         List<Step> stepList = leg.getStepList();
         ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline(
                 MapViewActivity.this, stepList, 5, Color.GREEN, 3, Color.BLUE);
@@ -75,8 +79,10 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
             googleMap.addPolyline(polylineOption);
         }
 
-        LatLng from = new LatLng(leg.getStartLocation().getLatitude(), leg.getStartLocation().getLongitude());
-        LatLng to = new LatLng(leg.getEndLocation().getLatitude(), leg.getEndLocation().getLongitude());
+        LatLng from = new LatLng(leg.getStartLocation().getLatitude(), leg.getStartLocation()
+                .getLongitude());
+        LatLng to = new LatLng(leg.getEndLocation().getLatitude(), leg.getEndLocation()
+                .getLongitude());
 
         Bound bound = route.getBound();
         final LatLngBounds bounds = new LatLngBounds(

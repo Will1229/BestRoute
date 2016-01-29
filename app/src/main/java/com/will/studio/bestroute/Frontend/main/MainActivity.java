@@ -50,12 +50,9 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String ITEM_NAME = "current_route_item";
-
     private RouteDataManager routeDataManager;
     private Activity currentActivity = null;
     private AlarmManager alarmMgr;
-    private PendingIntent pendingAlarmIntent;
     private int currentItemIdx = 0;
 
     @Override
@@ -150,12 +147,10 @@ public class MainActivity extends AppCompatActivity
 
     private void cancelAlarm(RouteItem routeItem) {
         int requestCode = routeItem.getAlarmRequestCode();
-        if (pendingAlarmIntent == null) {
-            Intent intent = buildNotificationIntent(routeItem);
-            pendingAlarmIntent =
-                    PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-        }
+        Intent intent = buildNotificationIntent(routeItem);
+        PendingIntent pendingAlarmIntent =
+                PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
         Log.d(getClass().getName(), "cancel alarm requestCode = " + requestCode);
         alarmMgr.cancel(pendingAlarmIntent);
     }
@@ -178,7 +173,7 @@ public class MainActivity extends AppCompatActivity
 
         int requestCode = routeItem.getAlarmRequestCode();
         Intent intent = buildNotificationIntent(routeItem);
-        pendingAlarmIntent =
+        PendingIntent pendingAlarmIntent =
                 PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent,
                         PendingIntent.FLAG_UPDATE_CURRENT);
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
@@ -200,7 +195,8 @@ public class MainActivity extends AppCompatActivity
                 .withServerKey("AIzaSyDPQ1GwAKKQZaxH1cmyVbx0FLDwKqKlJD8")
                 .from(from)
                 .to(to)
-                .transitMode(TransportMode.DRIVING)
+                .departureTime("now")
+                .transportMode(TransportMode.DRIVING)
                 .execute(new DirectionCallback() {
                     @Override
                     public void onDirectionSuccess(Direction direction) {
@@ -209,7 +205,7 @@ public class MainActivity extends AppCompatActivity
                             GoogleDirectionHelper.setDirection(direction);
                             final Intent mapViewIntent = new Intent(getApplicationContext(),
                                     MapViewActivity.class);
-                            mapViewIntent.putExtra(ITEM_NAME, routeItem);
+                            mapViewIntent.putExtra(Constants.EXTRA_NAME_ROUTE_ITEM, routeItem);
                             startActivity(mapViewIntent);
                         } else {
                             Toast.makeText(MainActivity.this, getText(R.string.direction_nok),
@@ -347,7 +343,7 @@ public class MainActivity extends AppCompatActivity
 
         //build map intent into notification
         Intent mapIntent = new Intent(getApplicationContext(), MapViewActivity.class);
-        mapIntent.putExtra(MainActivity.ITEM_NAME, routeItem);
+        mapIntent.putExtra(Constants.EXTRA_NAME_ROUTE_ITEM, routeItem);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
         stackBuilder.addParentStack(MapViewActivity.class);
         stackBuilder.addNextIntent(mapIntent);
@@ -368,6 +364,7 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
         intent.putExtra(Constants.NOTIFICATION_ID, Constants.NOTIFICATION_ID_VALUE);
         intent.putExtra(Constants.NOTIFICATION_NAME, notification);
+        intent.putExtra(Constants.EXTRA_NAME_ROUTE_ITEM, routeItem);
 
         return intent;
     }

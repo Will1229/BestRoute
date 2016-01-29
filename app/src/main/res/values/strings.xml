@@ -22,7 +22,7 @@
     <string name="notification_button">Preview Notification</string>
     <string name="new_item_from">Choose starting point</string>
     <string name="new_item_to">To</string>
-    <string name="new_item_alarm">Alarm</string>
+    <string name="new_item_alarm">Departure time: </string>
     <string name="new_item_null_time">--:--</string>
     <string name="new_item_mon">Mo</string>
     <string name="new_item_tue">Tu</string>

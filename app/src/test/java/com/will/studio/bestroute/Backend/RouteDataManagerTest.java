@@ -2,6 +2,8 @@ package com.will.studio.bestroute.backend;
 
 import android.util.Log;
 
+import com.akexorcist.googledirection.model.Direction;
+
 import junit.framework.TestCase;
 
 import java.io.File;
@@ -42,7 +44,6 @@ public class RouteDataManagerTest extends TestCase {
             Log.d(getClass().getName(), "Cannot delete " + testDir.toString());
         }
     }
-
 
     public RouteDataManagerTest() {
         testDirPath = System.getProperty("user.home") + File.separator + "AndroidTestDir";
@@ -108,16 +109,22 @@ public class RouteDataManagerTest extends TestCase {
 
     public void testSaveAndRestoreAndDeleteAllItems() throws Exception {
         final int loop = 3;
-        String from = "from place 111";
-        String to = "to place 222";
-        String time = "11:30";
-        RouteItem inputItem = new RouteItem(from, to, time);
 
         for (int i = 0; i < loop; ++i) {
+            String from = "from place " + Integer.toString(i);
+            String to = "to place" + Integer.toString(i * 10);
+            String time = "10:" + Integer.toString(10 + i);
+            RouteItem inputItem = new RouteItem(from, to, time);
+            inputItem.setDirection(new Direction());
+            assertNotNull(inputItem.getDirection());
             routeDataManager.saveItem(inputItem, null);
         }
 
         ArrayList<RouteItem> itemArrayList = routeDataManager.getAllItems();
+        for (RouteItem item : itemArrayList
+                ) {
+            assertNotNull(item.getDirection());
+        }
         File[] files = testDir.listFiles();
         assertEquals(loop, files.length);
         assertEquals(loop, itemArrayList.size());
@@ -129,6 +136,17 @@ public class RouteDataManagerTest extends TestCase {
         assertEquals(loop, files.length);
         assertEquals(loop, itemArrayList.size());
 
-    }
+        itemArrayList = anotherRouteDataManager.getAllItems();
+        for (RouteItem item : itemArrayList
+                ) {
+            assertNull(item.getDirection());
+        }
 
+        anotherRouteDataManager.deleteAllItems();
+        itemArrayList = anotherRouteDataManager.getAllItems();
+
+        files = testDir.listFiles();
+        assertEquals(0, files.length);
+        assertEquals(0, itemArrayList.size());
+    }
 }

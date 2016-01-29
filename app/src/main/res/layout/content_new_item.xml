@@ -1,94 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".frontend.main.NewItemActivity"
-    tools:showIn="@layout/activity_new_item">
-
-    <TableRow>
-
-        <EditText
-            android:id="@+id/new_item_from"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:hint="@string/new_item_from"
-            android:inputType="text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </TableRow>
-
-    <TableRow>
-
-        <EditText
-            android:id="@+id/new_item_to"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:hint="@string/new_item_to"
-            android:inputType="text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </TableRow>
-
-    <TableRow>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/new_item_alarm"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/new_item_time"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:onClick="showTimePickerDialog"
-            android:text="@string/new_item_null_time"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </TableRow>
-
-    <LinearLayout android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/save_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:onClick="onClickSaveButton"
-            android:text="@string/save_button" />
-
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:onClick="onClickCancelButton"
-            android:text="@string/cancel_button" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:context=".frontend.main.NewItemActivity"
+                tools:showIn="@layout/activity_new_item">
 
 
-    </LinearLayout>
-
-    <LinearLayout>
-
-        <Button
-            android:id="@+id/preview_notification_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:onClick="onClickPreviewNotificationButton"
-            android:text="@string/notification_button" />
-    </LinearLayout>
+    <EditText
+        android:id="@+id/new_item_from"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:hint="@string/new_item_from"
+        android:inputType="text"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
 
-</TableLayout>
+    <EditText
+        android:id="@+id/new_item_to"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/new_item_from"
+        android:hint="@string/new_item_to"
+        android:inputType="text"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+
+    <TextView
+        android:id="@+id/new_item_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/new_item_to"
+        android:text="@string/new_item_alarm"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+
+    <TextView
+        android:id="@+id/new_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:clickable="true"
+        android:onClick="showTimePickerDialog"
+        android:text="@string/new_item_null_time"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@+id/new_item_to"
+        android:layout_toRightOf="@+id/new_item_alarm"
+        android:layout_toEndOf="@+id/new_item_alarm"
+        android:layout_marginLeft="80dp"
+        android:layout_marginStart="80dp"/>
+
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="onClickSaveButton"
+        android:text="@string/save_button"
+        android:layout_marginTop="60dp"
+        android:layout_below="@+id/new_item_alarm"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/new_item_time"/>
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="onClickCancelButton"
+        android:text="@string/cancel_button"
+        android:layout_alignTop="@+id/save_button"
+        android:layout_alignLeft="@+id/new_item_time"
+        android:layout_alignStart="@+id/new_item_time"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+
+</RelativeLayout>
+
+
+

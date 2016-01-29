@@ -78,7 +78,7 @@ public class NewItemActivity extends AppCompatActivity {
                         .setSound(alarmSound);
 
         Intent resultIntent = new Intent(this, MapViewActivity.class);
-        resultIntent.putExtra(MainActivity.ITEM_NAME, newItem);
+        resultIntent.putExtra(Constants.EXTRA_NAME_ROUTE_ITEM, newItem);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MapViewActivity.class);
         stackBuilder.addNextIntent(resultIntent);

@@ -1,5 +1,7 @@
 package com.will.studio.bestroute.backend;
 
+import com.akexorcist.googledirection.model.Direction;
+
 import java.io.Serializable;
 
 /**
@@ -17,6 +19,7 @@ public class RouteItem implements Serializable {
     private double toLat = 0.0;
     private double toLng = 0.0;
     private int alarmRequestCode;
+    private transient Direction direction = null;
 
     public RouteItem(String from, String to, String time) {
         this.from = from;
@@ -38,6 +41,14 @@ public class RouteItem implements Serializable {
                 ", toLng=" + toLng +
                 ", alarmRequestCode=" + alarmRequestCode +
                 '}';
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     public int getAlarmRequestCode() {
