@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".frontend.main.MainActivity"
+            android:name=".frontend.main.Activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -28,7 +28,7 @@
             android:name=".frontend.settings.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".frontend.main.NewItemActivity"
+            android:name=".frontend.main.Activities.NewItemActivity"
             android:label="@string/title_activity_new_item"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -39,7 +39,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAGzeWRSZ52WwnQ4oqhYqHBP6dmJxBcjzc" />
 
-        <activity android:name=".frontend.main.MapViewActivity"></activity>
+        <activity android:name=".frontend.main.Activities.MapViewActivity"></activity>
 
         <receiver android:name=".frontend.main.Receivers.BootReceiver"
             android:enabled="true">

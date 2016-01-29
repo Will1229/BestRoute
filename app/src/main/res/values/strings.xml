@@ -42,9 +42,9 @@
     <string name="map_view_toolbar_title">Route</string>
 
     <!-- Strings related to Notification -->
-    <string name="notification_title">Your route plan is updated</string>
+    <string name="notification_title"> to </string>
     <string name="notification_content">Empty</string>
-    <string name="notification_ticker">Time to arrive </string>
+    <string name="notification_ticker">Best Route:</string>
     <string name="notification_dismiss_button">Dismiss</string>
     <string name="notification_navi_button">Navigate</string>
 

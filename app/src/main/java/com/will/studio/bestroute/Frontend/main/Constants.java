@@ -20,4 +20,7 @@ public interface Constants {
     int ACTIVITY_RESULT_NOK = 2;
     int ACTIVITY_RESULT_CANCEL = 3;
 
+    @SuppressWarnings("SpellCheckingInspection")
+    String APP_KEY = "AIzaSyDPQ1GwAKKQZaxH1cmyVbx0FLDwKqKlJD8";
+
 }

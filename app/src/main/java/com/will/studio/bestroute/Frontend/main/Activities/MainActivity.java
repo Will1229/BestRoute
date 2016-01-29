@@ -1,25 +1,16 @@
-package com.will.studio.bestroute.frontend.main;
+package com.will.studio.bestroute.frontend.main.Activities;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,28 +30,24 @@ import com.will.studio.bestroute.R;
 import com.will.studio.bestroute.backend.GoogleDirectionHelper;
 import com.will.studio.bestroute.backend.RouteDataManager;
 import com.will.studio.bestroute.backend.RouteItem;
-import com.will.studio.bestroute.frontend.main.Receivers.DismissReceiver;
-import com.will.studio.bestroute.frontend.main.Receivers.NaviReceiver;
-import com.will.studio.bestroute.frontend.main.Receivers.NotificationReceiver;
+import com.will.studio.bestroute.frontend.main.Constants;
+import com.will.studio.bestroute.frontend.main.RouteAlarmScheduler;
 import com.will.studio.bestroute.frontend.settings.SettingsActivity;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private RouteDataManager routeDataManager;
-    private Activity currentActivity = null;
-    private AlarmManager alarmMgr;
+    private RouteAlarmScheduler routeAlarmScheduler;
     private int currentItemIdx = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        currentActivity = this;
-        alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        routeAlarmScheduler = new RouteAlarmScheduler(getApplicationContext());
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_current_items);
@@ -94,6 +81,7 @@ public class MainActivity extends AppCompatActivity
         ListView listView = (ListView) findViewById(R.id.main_list);
         registerForContextMenu(listView);
 
+        final Activity currentActivity = this;
         AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -125,13 +113,13 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.delete_item:
-                cancelAlarm(routeItem);
+                routeAlarmScheduler.cancelAlarm(routeItem);
                 routeDataManager.deleteItem(routeItem.getFilePath());
                 routeDataManager.restoreAllItemsFromDisc();
                 refreshRouteItems();
                 return true;
             case R.id.edit_item:
-                cancelAlarm(routeItem);
+                routeAlarmScheduler.cancelAlarm(routeItem);
                 Intent intent = new Intent(this, NewItemActivity.class);
                 intent.putExtra(Constants.EXTRA_NAME_ROUTE_ITEM, routeItem);
                 startActivityForResult(intent, Constants.UPDATE_ITEM_REQUEST_CODE);
@@ -145,42 +133,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void cancelAlarm(RouteItem routeItem) {
-        int requestCode = routeItem.getAlarmRequestCode();
-        Intent intent = buildNotificationIntent(routeItem);
-        PendingIntent pendingAlarmIntent =
-                PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-        Log.d(getClass().getName(), "cancel alarm requestCode = " + requestCode);
-        alarmMgr.cancel(pendingAlarmIntent);
-    }
-
-    private void scheduleAlarm(RouteItem routeItem) {
-        String[] times = routeItem.getTime().split(":");
-        int hour = Integer.parseInt(times[0]);
-        int minute = Integer.parseInt(times[1]);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-
-        // skip immediate alarm in case user sets a time in the past.
-        long alarmTime = calendar.getTimeInMillis();
-        if (alarmTime < System.currentTimeMillis()) {
-            calendar.setTimeInMillis(alarmTime + AlarmManager.INTERVAL_DAY);
-        }
-
-        int requestCode = routeItem.getAlarmRequestCode();
-        Intent intent = buildNotificationIntent(routeItem);
-        PendingIntent pendingAlarmIntent =
-                PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingAlarmIntent);
-        Log.d(getClass().getName(), "create alarm requestCode = " + requestCode);
-    }
-
     private void getDirectionAndShow(final RouteItem routeItem) {
         LatLng from = GoogleDirectionHelper.getLocationFromAddress(this, routeItem.getFrom());
         LatLng to = GoogleDirectionHelper.getLocationFromAddress(this, routeItem.getTo());
@@ -192,7 +144,7 @@ public class MainActivity extends AppCompatActivity
 
         // TODO: make them settable in new item activity
         GoogleDirection
-                .withServerKey("AIzaSyDPQ1GwAKKQZaxH1cmyVbx0FLDwKqKlJD8")
+                .withServerKey(Constants.APP_KEY)
                 .from(from)
                 .to(to)
                 .departureTime("now")
@@ -327,74 +279,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private Intent buildNotificationIntent(RouteItem routeItem) {
-
-        //build notification builder
-        String content = "From " + routeItem.getFrom() + " to " + routeItem.getTo();
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(getApplicationContext())
-                        .setSmallIcon(R.drawable.ic_notifications)
-                        .setContentTitle(getText(R.string.notification_title))
-                        .setContentText(content)
-                        .setTicker(getText(R.string.notification_ticker))
-                        .setSound(alarmSound)
-                        .setAutoCancel(true);
-
-        //build map intent into notification
-        Intent mapIntent = new Intent(getApplicationContext(), MapViewActivity.class);
-        mapIntent.putExtra(Constants.EXTRA_NAME_ROUTE_ITEM, routeItem);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
-        stackBuilder.addParentStack(MapViewActivity.class);
-        stackBuilder.addNextIntent(mapIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        notificationBuilder.setContentIntent(resultPendingIntent);
-
-        notificationBuilder.addAction(R.drawable.ic_navigation, getResources().getString(R.string
-                .notification_navi_button), buildNaviAction(routeItem));
-        notificationBuilder.addAction(R.drawable.ic_close, getResources().getString(R.string
-                .notification_dismiss_button), buildDismissAction());
-
-        // build notification into notification intent
-        Notification notification = notificationBuilder.build();
-        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
-        intent.putExtra(Constants.NOTIFICATION_ID, Constants.NOTIFICATION_ID_VALUE);
-        intent.putExtra(Constants.NOTIFICATION_NAME, notification);
-        intent.putExtra(Constants.EXTRA_NAME_ROUTE_ITEM, routeItem);
-
-        return intent;
-    }
-
-    private PendingIntent buildDismissAction() {
-        Intent dismissIntent = new Intent(this, DismissReceiver.class);
-        dismissIntent.putExtra(Constants.NOTIFICATION_ID, Constants
-                .NOTIFICATION_ID_VALUE);
-        return PendingIntent.getBroadcast(getApplicationContext(), Constants
-                        .NOTIFICATION_REQUEST_CODE, dismissIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    private PendingIntent buildNaviAction(RouteItem routeItem) {
-        Intent naviIntent = new Intent(this, NaviReceiver.class);
-        naviIntent.putExtra(Constants.NOTIFICATION_ID, Constants
-                .NOTIFICATION_ID_VALUE);
-        naviIntent.putExtra(Constants.EXTRA_NAME_ROUTE_ITEM, routeItem);
-        return PendingIntent.getBroadcast(getApplicationContext(), Constants
-                        .NOTIFICATION_REQUEST_CODE,
-                naviIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
     private class ScheduleAlarmsTask extends AsyncTask<RouteItem, Integer, Void> {
 
         @Override
         protected Void doInBackground(RouteItem... routeItems) {
             for (RouteItem item : routeItems
                     ) {
-                scheduleAlarm(item);
+                routeAlarmScheduler.scheduleAlarm(item);
             }
             return null;
         }

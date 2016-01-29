@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main;
+package com.will.studio.bestroute.frontend.main.Activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.will.studio.bestroute.R;
 import com.will.studio.bestroute.backend.GoogleDirectionHelper;
 import com.will.studio.bestroute.backend.RouteItem;
+import com.will.studio.bestroute.frontend.main.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +69,18 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
         TextView view = (TextView) findViewById(R.id.map_view_text);
 
         Leg leg = direction.getRouteList().get(0).getLegList().get(0);
-        String durationInTraffic = leg.getDurationInTraffic().getText();
-        String summary = "If you leave now you will arrive destination in " + durationInTraffic;
+
+        String duration;
+        String summary = "you will arrive" + routeItem.getTo() + "in ";
+
+        if (leg.getDurationInTraffic() != null) {
+            duration = leg.getDurationInTraffic().getText();
+            summary += duration;
+        } else {
+            duration = leg.getDuration().getText();
+            summary += duration + "probably";
+        }
+
         view.setText(summary);
 
         List<Step> stepList = leg.getStepList();

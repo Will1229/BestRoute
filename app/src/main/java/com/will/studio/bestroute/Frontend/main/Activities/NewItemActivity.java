@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main;
+package com.will.studio.bestroute.frontend.main.Activities;
 
 import android.app.DialogFragment;
 import android.app.NotificationManager;
@@ -24,6 +24,9 @@ import com.will.studio.bestroute.R;
 import com.will.studio.bestroute.backend.GoogleDirectionHelper;
 import com.will.studio.bestroute.backend.RouteDataManager;
 import com.will.studio.bestroute.backend.RouteItem;
+import com.will.studio.bestroute.frontend.main.Constants;
+import com.will.studio.bestroute.frontend.main.RouteNotificationBuilder;
+import com.will.studio.bestroute.frontend.main.TimePickerFragment;
 
 public class NewItemActivity extends AppCompatActivity {
 
@@ -38,7 +41,8 @@ public class NewItemActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.new_item_toolbar_title);
         setSupportActionBar(toolbar);
 
-        existingRouteItem = (RouteItem) getIntent().getSerializableExtra(Constants.EXTRA_NAME_ROUTE_ITEM);
+        existingRouteItem = (RouteItem) getIntent().getSerializableExtra(Constants
+                .EXTRA_NAME_ROUTE_ITEM);
         if (existingRouteItem != null) {
             fillBlanks(existingRouteItem);
         }
@@ -63,38 +67,20 @@ public class NewItemActivity extends AppCompatActivity {
 
         RouteItem newItem = readFromAllText();
         if (newItem == null) {
-            Toast.makeText(getApplicationContext(), R.string.new_item_toast_fill_all_blanks, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.new_item_toast_fill_all_blanks,
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String content = "From " + newItem.getFrom() + " to " + newItem.getTo();
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.cast_ic_notification_0)
-                        .setContentTitle(getText(R.string.notification_title))
-                        .setContentText(content)
-                        .setTicker(getText(R.string.notification_ticker))
-                        .setSound(alarmSound);
-
-        Intent resultIntent = new Intent(this, MapViewActivity.class);
-        resultIntent.putExtra(Constants.EXTRA_NAME_ROUTE_ITEM, newItem);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MapViewActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-// mId allows you to update the notification later on.
-        mNotificationManager.notify(0, mBuilder.build());
+        RouteNotificationBuilder routeNotificationBuilder = new
+                RouteNotificationBuilder(getApplicationContext());
+        final NotificationManager notificationManager = (NotificationManager)
+                getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(Constants.NOTIFICATION_ID_VALUE,
+                routeNotificationBuilder
+                        .buildNotification(newItem));
 
     }
-
 
     public void onClickSaveButton(View view) {
         new SaveNewItemAndScheduleAlarmTask().execute();
@@ -115,8 +101,10 @@ public class NewItemActivity extends AppCompatActivity {
             if (newItem == null) {
                 return false;
             }
-            LatLng from = GoogleDirectionHelper.getLocationFromAddress(getApplicationContext(), newItem.getFrom());
-            LatLng to = GoogleDirectionHelper.getLocationFromAddress(getApplicationContext(), newItem.getTo());
+            LatLng from = GoogleDirectionHelper.getLocationFromAddress(getApplicationContext(),
+                    newItem.getFrom());
+            LatLng to = GoogleDirectionHelper.getLocationFromAddress(getApplicationContext(),
+                    newItem.getTo());
 
             if (from == null || to == null) {
                 return false;
@@ -152,7 +140,8 @@ public class NewItemActivity extends AppCompatActivity {
             if (success) {
                 finish();
             } else {
-                Toast.makeText(getApplicationContext(), R.string.new_item_toast_fill_all_blanks, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.new_item_toast_fill_all_blanks,
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
