@@ -5,9 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/BestRoute.iml" filepath="$PROJECT_DIR$/BestRoute.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/googleDirectionLibrary/googleDirectionLibrary.iml" filepath="$PROJECT_DIR$/googleDirectionLibrary/googleDirectionLibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libs/googleDirectionLibrary/googleDirectionLibrary.iml" filepath="$PROJECT_DIR$/libs/googleDirectionLibrary/googleDirectionLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/googleDirectionLibrary-release/googleDirectionLibrary-release.iml" filepath="$PROJECT_DIR$/googleDirectionLibrary-release/googleDirectionLibrary-release.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libs/googleDirectionLibrary-release/googleDirectionLibrary-release.iml" filepath="$PROJECT_DIR$/libs/googleDirectionLibrary-release/googleDirectionLibrary-release.iml" />
     </modules>
   </component>
 </project>
