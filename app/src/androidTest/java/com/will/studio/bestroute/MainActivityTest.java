@@ -23,7 +23,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         super.setUp();
         setActivityInitialTouchMode(true);
         mainActivity = getActivity();
-        mainList = mainActivity.findViewById(R.id.main_list);
+        mainList = mainActivity.findViewById(R.id.main_item_list);
 
     }
 

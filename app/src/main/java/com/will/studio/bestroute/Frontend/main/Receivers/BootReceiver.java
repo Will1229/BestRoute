@@ -18,15 +18,19 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            RouteDataManager routeDataManager = new RouteDataManager(context.getFilesDir()
-                    .getAbsolutePath());
-            routeDataManager.restoreAllItemsFromDisc();
-            ArrayList<RouteItem> routeItemList = routeDataManager.getAllItems();
-            RouteAlarmScheduler routeAlarmScheduler = new RouteAlarmScheduler(context);
-            for (RouteItem item : routeItemList
-                    ) {
-                routeAlarmScheduler.scheduleAlarm(item);
-            }
+            restoreAllAlarms(context);
+        }
+    }
+
+    private void restoreAllAlarms(Context context) {
+        RouteDataManager routeDataManager = new RouteDataManager(context.getFilesDir()
+                .getAbsolutePath());
+        routeDataManager.restoreAllItemsFromDisc();
+        ArrayList<RouteItem> routeItemList = routeDataManager.getAllItems();
+        RouteAlarmScheduler routeAlarmScheduler = new RouteAlarmScheduler(context);
+        for (RouteItem item : routeItemList
+                ) {
+            routeAlarmScheduler.scheduleAlarm(item);
         }
     }
 }

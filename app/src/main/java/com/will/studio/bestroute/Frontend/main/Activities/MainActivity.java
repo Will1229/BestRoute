@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,6 +31,7 @@ import com.will.studio.bestroute.backend.RouteDataManager;
 import com.will.studio.bestroute.backend.RouteItem;
 import com.will.studio.bestroute.frontend.main.Constants;
 import com.will.studio.bestroute.frontend.main.RouteAlarmScheduler;
+import com.will.studio.bestroute.frontend.main.RouteItemListAdapter;
 import com.will.studio.bestroute.frontend.settings.SettingsActivity;
 
 import java.util.ArrayList;
@@ -78,23 +78,25 @@ public class MainActivity extends AppCompatActivity
 
         refreshRouteItems();
 
-        ListView listView = (ListView) findViewById(R.id.main_list);
+        ListView listView = (ListView) findViewById(R.id.main_item_list);
         registerForContextMenu(listView);
 
         final Activity currentActivity = this;
-        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+        AdapterView.OnItemLongClickListener listener = new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long
+                    id) {
                 if (position < 0) {
-                    return;
+                    return false;
                 }
                 currentItemIdx = position;
                 currentActivity.openContextMenu(parent);
+                return true;
             }
 
         };
 
-        listView.setOnItemClickListener(listener);
+        listView.setOnItemLongClickListener(listener);
 
     }
 
@@ -182,19 +184,8 @@ public class MainActivity extends AppCompatActivity
 
     private void refreshRouteItems() {
         ArrayList<RouteItem> itemList = routeDataManager.getAllItems();
-        ArrayList<String> itemHeadlineList = new ArrayList<>();
-
-        for (RouteItem i : itemList
-                ) {
-            itemHeadlineList.add(" From " + i.getFrom()
-                    + " to " + i.getTo()
-                    + " at " + i.getTime());
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1,
-                itemHeadlineList);
-        ListView view = (ListView) findViewById(R.id.main_list);
+        RouteItemListAdapter adapter = new RouteItemListAdapter(this, itemList);
+        ListView view = (ListView) findViewById(R.id.main_item_list);
         view.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

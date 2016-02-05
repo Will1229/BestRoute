@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/content_main"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:paddingBottom="@dimen/activity_vertical_margin"
-              android:paddingLeft="@dimen/activity_horizontal_margin"
-              android:paddingRight="@dimen/activity_horizontal_margin"
-              android:paddingTop="@dimen/activity_vertical_margin"
-              android:weightSum="1"
-              app:layout_behavior="@string/appbar_scrolling_view_behavior"
-              tools:context=".frontend.main.Activities.MainActivity"
-              tools:showIn="@layout/app_bar_main">
+<LinearLayout
+    android:id="@+id/content_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="1"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".frontend.main.Activities.MainActivity"
+    tools:showIn="@layout/app_bar_main">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:gravity="start"
         android:text="@string/current_plans_title"
         android:textSize="@dimen/abc_dialog_padding_top_material"/>
 
     <ListView
-        android:id="@+id/main_list"
+        android:id="@+id/main_item_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
+        android:longClickable="true"
         android:divider="#afa1a1"
-        android:dividerHeight="1dp"></ListView>
+        android:dividerHeight="1dp"/>
 
 </LinearLayout>
