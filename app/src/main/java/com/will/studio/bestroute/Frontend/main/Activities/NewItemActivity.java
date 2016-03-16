@@ -2,15 +2,10 @@ package com.will.studio.bestroute.frontend.main.Activities;
 
 import android.app.DialogFragment;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -117,11 +112,10 @@ public class NewItemActivity extends AppCompatActivity {
 
             String dirPath = getApplicationContext().getFilesDir().getAbsolutePath();
             RouteDataManager routeDataManager = new RouteDataManager(dirPath);
-            String filePath = null;
-            if (existingRouteItem != null) { // edit existing item
-                filePath = existingRouteItem.getFilePath();
+            if (existingRouteItem != null) {
+                routeDataManager.deleteItem(existingRouteItem);
             }
-            boolean success = routeDataManager.saveItem(newItem, filePath);
+            boolean success = routeDataManager.saveItem(newItem);
 
             Intent returnIntent = new Intent();
             if (success) {

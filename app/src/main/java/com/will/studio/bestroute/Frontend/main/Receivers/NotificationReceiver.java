@@ -45,8 +45,9 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         GoogleDirection.withServerKey(Constants.APP_KEY).from(from).to(to).transitMode
                 (TransportMode.DRIVING).departureTime("now").execute(new DirectionCallback() {
+
             @Override
-            public void onDirectionSuccess(Direction direction) {
+            public void onDirectionSuccess(Direction direction, String rawBody) {
                 String status = direction.getStatus();
                 if (status.equals(RequestResult.OK)) {
                     Log.d(getClass().getName(), "onDirectionSuccess OK");

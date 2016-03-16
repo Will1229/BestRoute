@@ -14,6 +14,7 @@ public class RouteItem implements Serializable {
     private String to;
     private String time;
     private String filePath;
+    private boolean isSwitchedOn = true;
     private double fromLat = 0.0;
     private double fromLng = 0.0;
     private double toLat = 0.0;
@@ -26,21 +27,6 @@ public class RouteItem implements Serializable {
         this.to = to;
         this.time = time;
         alarmRequestCode = generateCode();
-    }
-
-    @Override
-    public String toString() {
-        return "RouteItem{" +
-                "from='" + from + '\'' +
-                ", to='" + to + '\'' +
-                ", time='" + time + '\'' +
-                ", filePath='" + filePath + '\'' +
-                ", fromLat=" + fromLat +
-                ", fromLng=" + fromLng +
-                ", toLat=" + toLat +
-                ", toLng=" + toLng +
-                ", alarmRequestCode=" + alarmRequestCode +
-                '}';
     }
 
     public Direction getDirection() {
@@ -123,6 +109,30 @@ public class RouteItem implements Serializable {
         return to;
     }
 
+    public boolean isSwitchedOn() {
+        return isSwitchedOn;
+    }
+
+    public void setIsSwitchedOn(boolean isSwitchedOn) {
+        this.isSwitchedOn = isSwitchedOn;
+    }
+
+    @Override
+    public String toString() {
+        return "RouteItem{" +
+                "alarmRequestCode=" + alarmRequestCode +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", time='" + time + '\'' +
+                ", filePath='" + filePath + '\'' +
+                ", isSwitchedOn=" + isSwitchedOn +
+                ", fromLat=" + fromLat +
+                ", fromLng=" + fromLng +
+                ", toLat=" + toLat +
+                ", toLng=" + toLng +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -130,16 +140,27 @@ public class RouteItem implements Serializable {
 
         RouteItem routeItem = (RouteItem) o;
 
+        if (isSwitchedOn() != routeItem.isSwitchedOn()) return false;
         if (Double.compare(routeItem.getFromLat(), getFromLat()) != 0) return false;
         if (Double.compare(routeItem.getFromLng(), getFromLng()) != 0) return false;
         if (Double.compare(routeItem.getToLat(), getToLat()) != 0) return false;
         if (Double.compare(routeItem.getToLng(), getToLng()) != 0) return false;
         if (getAlarmRequestCode() != routeItem.getAlarmRequestCode()) return false;
-        if (!getFrom().equals(routeItem.getFrom())) return false;
-        if (!getTo().equals(routeItem.getTo())) return false;
+        if (getFrom() != null ? !getFrom().equals(routeItem.getFrom()) : routeItem.getFrom() !=
+                null)
+            return false;
+        if (getTo() != null ? !getTo().equals(routeItem.getTo()) : routeItem.getTo() != null)
+            return false;
+        if (getTime() != null ? !getTime().equals(routeItem.getTime()) : routeItem.getTime() !=
+                null)
+            return false;
         //noinspection SimplifiableIfStatement
-        if (!getTime().equals(routeItem.getTime())) return false;
-        return getFilePath().equals(routeItem.getFilePath());
+        if (getFilePath() != null ? !getFilePath().equals(routeItem.getFilePath()) : routeItem
+                .getFilePath() != null)
+            return false;
+        return !(getDirection() != null ? !getDirection().equals(routeItem.getDirection()) :
+                routeItem
+                        .getDirection() != null);
 
     }
 
@@ -147,10 +168,11 @@ public class RouteItem implements Serializable {
     public int hashCode() {
         int result;
         long temp;
-        result = getFrom().hashCode();
-        result = 31 * result + getTo().hashCode();
-        result = 31 * result + getTime().hashCode();
-        result = 31 * result + getFilePath().hashCode();
+        result = getFrom() != null ? getFrom().hashCode() : 0;
+        result = 31 * result + (getTo() != null ? getTo().hashCode() : 0);
+        result = 31 * result + (getTime() != null ? getTime().hashCode() : 0);
+        result = 31 * result + (getFilePath() != null ? getFilePath().hashCode() : 0);
+        result = 31 * result + (isSwitchedOn() ? 1 : 0);
         temp = Double.doubleToLongBits(getFromLat());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(getFromLng());
@@ -160,6 +182,7 @@ public class RouteItem implements Serializable {
         temp = Double.doubleToLongBits(getToLng());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + getAlarmRequestCode();
+        result = 31 * result + (getDirection() != null ? getDirection().hashCode() : 0);
         return result;
     }
 }

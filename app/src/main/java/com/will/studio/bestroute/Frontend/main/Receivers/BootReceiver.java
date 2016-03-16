@@ -30,7 +30,9 @@ public class BootReceiver extends BroadcastReceiver {
         RouteAlarmScheduler routeAlarmScheduler = new RouteAlarmScheduler(context);
         for (RouteItem item : routeItemList
                 ) {
-            routeAlarmScheduler.scheduleAlarm(item);
+            if (item.isSwitchedOn()) {
+                routeAlarmScheduler.scheduleAlarm(item);
+            }
         }
     }
 }

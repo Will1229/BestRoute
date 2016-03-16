@@ -74,30 +74,32 @@ public class MainActivity extends AppCompatActivity
 
         String dirPath = getApplicationContext().getFilesDir().getAbsolutePath();
         routeDataManager = new RouteDataManager(dirPath);
-        routeDataManager.restoreAllItemsFromDisc();
-
-        refreshRouteItems();
 
         ListView listView = (ListView) findViewById(R.id.main_item_list);
         registerForContextMenu(listView);
 
         final Activity currentActivity = this;
-        AdapterView.OnItemLongClickListener listener = new AdapterView.OnItemLongClickListener() {
+        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long
+            public void onItemClick(AdapterView<?> parent, View view, int position, long
                     id) {
                 if (position < 0) {
-                    return false;
+                    return;
                 }
                 currentItemIdx = position;
                 currentActivity.openContextMenu(parent);
-                return true;
             }
-
         };
 
-        listView.setOnItemLongClickListener(listener);
+        listView.setOnItemClickListener(listener);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        routeDataManager.restoreAllItemsFromDisc();
+        refreshRouteItems();
     }
 
     @Override
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.delete_item:
                 routeAlarmScheduler.cancelAlarm(routeItem);
-                routeDataManager.deleteItem(routeItem.getFilePath());
+                routeDataManager.deleteItem(routeItem);
                 routeDataManager.restoreAllItemsFromDisc();
                 refreshRouteItems();
                 return true;
@@ -152,8 +154,9 @@ public class MainActivity extends AppCompatActivity
                 .departureTime("now")
                 .transportMode(TransportMode.DRIVING)
                 .execute(new DirectionCallback() {
+
                     @Override
-                    public void onDirectionSuccess(Direction direction) {
+                    public void onDirectionSuccess(Direction direction, String rawBody) {
                         String status = direction.getStatus();
                         if (status.equals(RequestResult.OK)) {
                             GoogleDirectionHelper.setDirection(direction);
@@ -173,13 +176,6 @@ public class MainActivity extends AppCompatActivity
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        routeDataManager.restoreAllItemsFromDisc();
-        refreshRouteItems();
     }
 
     private void refreshRouteItems() {
@@ -220,7 +216,11 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
             return true;
         } else if (id == R.id.action_delete_all_plans) {
-            //TODO: delete all alarms
+            ArrayList<RouteItem> itemList = routeDataManager.getAllItems();
+            for (RouteItem i : itemList
+                    ) {
+                routeAlarmScheduler.cancelAlarm(i);
+            }
             routeDataManager.deleteAllItems();
             refreshRouteItems();
             return true;

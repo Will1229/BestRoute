@@ -5,9 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.will.studio.bestroute.R;
+import com.will.studio.bestroute.backend.RouteDataManager;
 import com.will.studio.bestroute.backend.RouteItem;
 
 import java.util.ArrayList;
@@ -49,7 +53,7 @@ public class RouteItemListAdapter extends BaseAdapter {
                 .LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.content_one_item, parent, false);
 
-        RouteItem item = itemList.get(position);
+        final RouteItem item = itemList.get(position);
 
         TextView time = (TextView) convertView.findViewById(R.id.item_list_time);
         time.setText(item.getTime());
@@ -57,7 +61,30 @@ public class RouteItemListAdapter extends BaseAdapter {
         from.setText(item.getFrom());
         TextView to = (TextView) convertView.findViewById(R.id.item_list_to);
         to.setText(item.getTo());
-        //TODO: repeat
+        //TODO: show repeat
+
+        Switch aSwitch = (Switch) convertView.findViewById(R.id.item_list_alarm_switch);
+        aSwitch.setChecked(item.isSwitchedOn());
+
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                RouteAlarmScheduler routeAlarmScheduler = new RouteAlarmScheduler(context);
+                RouteDataManager routeDataManager = new RouteDataManager(context.getFilesDir()
+                        .getAbsolutePath());
+                if (isChecked) {
+                    routeAlarmScheduler.scheduleAlarm(item);
+                    Toast.makeText(context, "Alarm on " + item.getTime() + " is switched on", Toast
+                            .LENGTH_SHORT).show();
+                } else {
+                    routeAlarmScheduler.cancelAlarm(item);
+                    Toast.makeText(context, "Alarm on " + item.getTime() + " is switched off", Toast
+                            .LENGTH_SHORT).show();
+                }
+                item.setIsSwitchedOn(isChecked);
+                routeDataManager.updateItem(item);
+            }
+        });
 
         return convertView;
     }

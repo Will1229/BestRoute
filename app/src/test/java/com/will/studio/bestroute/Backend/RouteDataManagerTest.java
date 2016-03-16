@@ -66,12 +66,13 @@ public class RouteDataManagerTest extends TestCase {
         inputItem.setFromLng(fromLng);
         inputItem.setToLat(toLat);
         inputItem.setToLng(toLng);
+        inputItem.setIsSwitchedOn(true);
 
         assertNull(inputItem.getFilePath());
 
         int requestCode1 = inputItem.getAlarmRequestCode();
         assertNotNull(requestCode1);
-        routeDataManager.saveItem(inputItem, null);
+        routeDataManager.saveItem(inputItem);
 
         String filePath = inputItem.getFilePath();
         assertNotNull(filePath);
@@ -82,7 +83,6 @@ public class RouteDataManagerTest extends TestCase {
         assertEquals(inputItem, outputItem);
 
         // Edit
-        filePath = inputItem.getFilePath();
         from = "from place 222";
         to = "to place 333";
         time = "11:33";
@@ -92,10 +92,12 @@ public class RouteDataManagerTest extends TestCase {
         inputItem.setFromLng(fromLng);
         inputItem.setToLat(toLat);
         inputItem.setToLng(toLng);
+        inputItem.setIsSwitchedOn(false);
 
         int requestCode2 = inputItem.getAlarmRequestCode();
         assertTrue(requestCode1 != requestCode2);
-        routeDataManager.saveItem(inputItem, filePath);
+        routeDataManager.deleteItem(outputItem);
+        routeDataManager.saveItem(inputItem);
 
         files = testDir.listFiles();
         assertEquals(1, files.length);
@@ -117,7 +119,7 @@ public class RouteDataManagerTest extends TestCase {
             RouteItem inputItem = new RouteItem(from, to, time);
             inputItem.setDirection(new Direction());
             assertNotNull(inputItem.getDirection());
-            routeDataManager.saveItem(inputItem, null);
+            routeDataManager.saveItem(inputItem);
         }
 
         ArrayList<RouteItem> itemArrayList = routeDataManager.getAllItems();
@@ -148,5 +150,37 @@ public class RouteDataManagerTest extends TestCase {
         files = testDir.listFiles();
         assertEquals(0, files.length);
         assertEquals(0, itemArrayList.size());
+    }
+
+    public void testUpdateOneItem() {
+        // New
+        String from = "from place 111";
+        String to = "to place 222";
+        String time = "11:30";
+        double fromLat = 1.1;
+        double fromLng = 2.2;
+        double toLat = 3.3;
+        double toLng = 4.4;
+
+        RouteItem originItem = new RouteItem(from, to, time);
+        originItem.setFromLat(fromLat);
+        originItem.setFromLng(fromLng);
+        originItem.setToLat(toLat);
+        originItem.setToLng(toLng);
+        originItem.setIsSwitchedOn(true);
+        assertNull(originItem.getFilePath());
+        routeDataManager.saveItem(originItem);
+
+        originItem.setIsSwitchedOn(false);
+        routeDataManager.updateItem(originItem);
+
+        File[] files = testDir.listFiles();
+        assertEquals(1, files.length);
+        RouteItem updatedItem = routeDataManager.restoreItemFromDisc(files[0].getAbsolutePath());
+        assertFalse(updatedItem.isSwitchedOn());
+
+        if (!files[0].delete()) {
+            fail();
+        }
     }
 }

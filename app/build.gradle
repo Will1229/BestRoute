@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 23
@@ -39,9 +39,9 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
-    compile 'com.google.android.gms:play-services:8.3.0'
-//    compile 'com.akexorcist:googledirectionlibrary:1.0.3'
-    compile(name: 'googleDirectionLibrary-release/googleDirectionLibrary-release', ext: 'aar')
+//    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.akexorcist:googledirectionlibrary:1.0.4'
+//    compile(name: 'googleDirectionLibrary-release/googleDirectionLibrary-release', ext: 'aar')
 
     // Test only begin. include external libs for googleDirectionLibrary
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'

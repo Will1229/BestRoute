@@ -1,1 +1,1 @@
-include ':app', ':googleDirectionLibrary', ':googleDirectionLibrary-release'
+include ':app'

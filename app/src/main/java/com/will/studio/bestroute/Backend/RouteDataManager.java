@@ -32,12 +32,9 @@ public class RouteDataManager {
         };
     }
 
-    public boolean saveItem(RouteItem newItem, String path) {
-        String filePath = path;
-        if (filePath == null || !filePath.contains(itemPrefix) || !filePath.contains(dirPath)) {
-            filePath = dirPath + File.separator + itemPrefix + Long.toString(System.currentTimeMillis());
-        }
-
+    public boolean saveItem(RouteItem newItem) {
+        String filePath =
+                dirPath + File.separator + itemPrefix + Long.toString(System.currentTimeMillis());
         FileOutputStream fos = null;
         ObjectOutputStream oos = null;
         try {
@@ -69,23 +66,27 @@ public class RouteDataManager {
     public boolean deleteAllItems() {
         for (RouteItem item : itemList
                 ) {
-            deleteItem(item.getFilePath());
+            deleteItem(item);
         }
         itemList.clear();
         return false;
     }
 
-    public void deleteItem(String filePath) {
-        File file = new File(filePath);
+    public void deleteItem(RouteItem routeItem) {
+        File file = new File(routeItem.getFilePath());
         if (!file.delete()) {
-            Log.d(getClass().getName(), "Unable to delete " + filePath);
+            Log.d(getClass().getName(), "Unable to delete " + routeItem.getFilePath());
         }
+    }
+
+    public void updateItem(RouteItem routeItem) {
+        deleteItem(routeItem);
+        saveItem(routeItem);
     }
 
     public ArrayList<RouteItem> getAllItems() {
         return itemList;
     }
-
 
     public void restoreAllItemsFromDisc() {
         File[] fileList = new File(dirPath).listFiles(itemFilter);
