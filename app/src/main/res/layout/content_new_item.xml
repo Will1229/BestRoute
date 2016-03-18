@@ -10,20 +10,28 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:context=".frontend.main.Activities.NewItemActivity"
+                tools:context=".frontend.main.activities.NewItemActivity"
                 tools:showIn="@layout/activity_new_item">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_item_hint"
+        android:layout_marginBottom="5dp"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textStyle="italic"
+        android:id="@+id/new_item_hint"/>
 
     <EditText
         android:id="@+id/new_item_from"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:hint="@string/new_item_from"
         android:inputType="text"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@+id/new_item_hint"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
 
     <EditText

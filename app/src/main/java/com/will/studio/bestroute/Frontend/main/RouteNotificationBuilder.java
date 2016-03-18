@@ -13,9 +13,9 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
 import com.will.studio.bestroute.R;
 import com.will.studio.bestroute.backend.RouteItem;
-import com.will.studio.bestroute.frontend.main.Activities.MapViewActivity;
-import com.will.studio.bestroute.frontend.main.Receivers.DismissReceiver;
-import com.will.studio.bestroute.frontend.main.Receivers.NaviReceiver;
+import com.will.studio.bestroute.frontend.main.activities.MapViewActivity;
+import com.will.studio.bestroute.frontend.main.receivers.DismissReceiver;
+import com.will.studio.bestroute.frontend.main.receivers.NaviReceiver;
 
 /**
  * Created by egaozhi on 2016-01-29.

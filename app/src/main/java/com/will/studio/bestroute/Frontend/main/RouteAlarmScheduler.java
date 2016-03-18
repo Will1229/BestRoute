@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.will.studio.bestroute.backend.RouteItem;
-import com.will.studio.bestroute.frontend.main.Receivers.NotificationReceiver;
+import com.will.studio.bestroute.frontend.main.receivers.NotificationReceiver;
 
 import java.util.Calendar;
 

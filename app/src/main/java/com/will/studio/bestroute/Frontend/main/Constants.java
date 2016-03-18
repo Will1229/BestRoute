@@ -20,6 +20,8 @@ public interface Constants {
     int ACTIVITY_RESULT_NOK = 2;
     int ACTIVITY_RESULT_CANCEL = 3;
 
+    enum SaveItemReturnCode {OK, EMPTY_ADD, ILLEGAL_FROM, ILLEGAL_TO, UNKNOWN_ERROR}
+
     @SuppressWarnings("SpellCheckingInspection")
     String APP_KEY = "AIzaSyDPQ1GwAKKQZaxH1cmyVbx0FLDwKqKlJD8";
 

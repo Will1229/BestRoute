@@ -1,9 +1,6 @@
-package com.will.studio.bestroute.frontend.main.Activities;
+package com.will.studio.bestroute.frontend.main.activities;
 
-import android.app.ActionBar;
 import android.app.DialogFragment;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,7 +20,7 @@ import com.will.studio.bestroute.backend.GoogleDirectionHelper;
 import com.will.studio.bestroute.backend.RouteDataManager;
 import com.will.studio.bestroute.backend.RouteItem;
 import com.will.studio.bestroute.frontend.main.Constants;
-import com.will.studio.bestroute.frontend.main.RouteNotificationBuilder;
+import com.will.studio.bestroute.frontend.main.Constants.SaveItemReturnCode;
 import com.will.studio.bestroute.frontend.main.TimePickerFragment;
 
 public class NewItemActivity extends AppCompatActivity {
@@ -61,7 +58,7 @@ public class NewItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.new_item_action_save:
-                new SaveNewItemAndScheduleAlarmTask().execute();
+                new SaveNewItemTask().execute();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -81,40 +78,23 @@ public class NewItemActivity extends AppCompatActivity {
         newFragment.show(this.getFragmentManager(), "timePicker");
     }
 
-    public void onClickPreviewNotificationButton(View v) {
-
-        RouteItem newItem = readFromAllText();
-        if (newItem == null) {
-            Toast.makeText(getApplicationContext(), R.string.new_item_toast_fill_all_blanks,
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        RouteNotificationBuilder routeNotificationBuilder = new
-                RouteNotificationBuilder(getApplicationContext());
-        final NotificationManager notificationManager = (NotificationManager)
-                getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(Constants.NOTIFICATION_ID_VALUE,
-                routeNotificationBuilder
-                        .buildNotification(newItem));
-
-    }
-
-    private class SaveNewItemAndScheduleAlarmTask extends AsyncTask<Void, Integer, Boolean> {
+    private class SaveNewItemTask extends AsyncTask<Void, Integer, SaveItemReturnCode> {
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected SaveItemReturnCode doInBackground(Void... params) {
             RouteItem newItem = readFromAllText();
             if (newItem == null) {
-                return false;
+                return SaveItemReturnCode.EMPTY_ADD;
             }
             LatLng from = GoogleDirectionHelper.getLocationFromAddress(getApplicationContext(),
                     newItem.getFrom());
             LatLng to = GoogleDirectionHelper.getLocationFromAddress(getApplicationContext(),
                     newItem.getTo());
 
-            if (from == null || to == null) {
-                return false;
+            if (from == null) {
+                return SaveItemReturnCode.ILLEGAL_FROM;
+            } else if (to == null) {
+                return SaveItemReturnCode.ILLEGAL_TO;
             }
 
             newItem.setFromLat(from.latitude);
@@ -124,7 +104,7 @@ public class NewItemActivity extends AppCompatActivity {
 
             String dirPath = getApplicationContext().getFilesDir().getAbsolutePath();
             RouteDataManager routeDataManager = new RouteDataManager(dirPath);
-            if (existingRouteItem != null) {
+            if (existingRouteItem != null) { // edit on existing item
                 routeDataManager.deleteItem(existingRouteItem);
             }
             boolean success = routeDataManager.saveItem(newItem);
@@ -133,21 +113,38 @@ public class NewItemActivity extends AppCompatActivity {
             if (success) {
                 returnIntent.putExtra(Constants.UPDATED_ROUTE_ITEM, newItem);
                 setResult(Constants.ACTIVITY_RESULT_OK, returnIntent);
-                return true;
+                return SaveItemReturnCode.OK;
             } else {
                 setResult(Constants.ACTIVITY_RESULT_NOK, returnIntent);
             }
-            return false;
+            return SaveItemReturnCode.UNKNOWN_ERROR;
         }
 
         @Override
-        protected void onPostExecute(Boolean success) {
-            super.onPostExecute(success);
-            if (success) {
-                finish();
-            } else {
-                Toast.makeText(getApplicationContext(), R.string.new_item_toast_fill_all_blanks,
-                        Toast.LENGTH_SHORT).show();
+        protected void onPostExecute(SaveItemReturnCode returnCode) {
+            super.onPostExecute(returnCode);
+
+            switch (returnCode) {
+                case OK:
+                    finish();
+                    break;
+                case EMPTY_ADD:
+                    Toast.makeText(getApplicationContext(), R.string.new_item_toast_fill_all_blanks,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case ILLEGAL_FROM:
+                    Toast.makeText(getApplicationContext(), R.string.new_item_toast_illegal_from,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case ILLEGAL_TO:
+                    Toast.makeText(getApplicationContext(), R.string.new_item_toast_illegal_to,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case UNKNOWN_ERROR:
+                    Toast.makeText(getApplicationContext(), R.string.new_item_toast_unknown_error,
+                            Toast.LENGTH_SHORT).show();
+                default:
+                    break;
             }
         }
     }

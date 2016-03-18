@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main.Receivers;
+package com.will.studio.bestroute.frontend.main.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

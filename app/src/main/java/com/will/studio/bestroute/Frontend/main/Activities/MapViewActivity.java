@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main.Activities;
+package com.will.studio.bestroute.frontend.main.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
