@@ -1,5 +1,6 @@
 package com.will.studio.bestroute.frontend.main.Activities;
 
+import android.app.ActionBar;
 import android.app.DialogFragment;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,6 +38,10 @@ public class NewItemActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_add_new_item);
         toolbar.setTitle(R.string.new_item_toolbar_title);
         setSupportActionBar(toolbar);
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
 
         existingRouteItem = (RouteItem) getIntent().getSerializableExtra(Constants
                 .EXTRA_NAME_ROUTE_ITEM);
@@ -42,6 +49,22 @@ public class NewItemActivity extends AppCompatActivity {
             fillBlanks(existingRouteItem);
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.new_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.new_item_action_save:
+                new SaveNewItemAndScheduleAlarmTask().execute();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void fillBlanks(RouteItem routeItem) {
@@ -75,17 +98,6 @@ public class NewItemActivity extends AppCompatActivity {
                 routeNotificationBuilder
                         .buildNotification(newItem));
 
-    }
-
-    public void onClickSaveButton(View view) {
-        new SaveNewItemAndScheduleAlarmTask().execute();
-    }
-
-    public void onClickCancelButton(View view) {
-        existingRouteItem = null;
-        Intent returnIntent = new Intent();
-        setResult(Constants.ACTIVITY_RESULT_CANCEL, returnIntent);
-        finish();
     }
 
     private class SaveNewItemAndScheduleAlarmTask extends AsyncTask<Void, Integer, Boolean> {
