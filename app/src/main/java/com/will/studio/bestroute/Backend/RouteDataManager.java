@@ -94,9 +94,7 @@ public class RouteDataManager {
         for (File file : fileList
                 ) {
             RouteItem item = restoreItemFromDisc(file.getAbsolutePath());
-            if (item != null) {
-                itemList.add(item);
-            }
+            if (item != null) itemList.add(item);
         }
     }
 

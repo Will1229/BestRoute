@@ -37,6 +37,8 @@
     <string name="current_plans_title">My Route Plans</string>
     <string name="success_to_save_new_item">Your route plan is saved and will be updated everyday at: </string>
     <string name="fail_to_save_new_item">Failed to save. Try again</string>
+    <string name="from_address">From: %s</string>
+    <string name="to_address">To: %s</string>
 
     <!-- Strings related to MapViewActivity -->
     <string name="map_view_toolbar_title">Route</string>

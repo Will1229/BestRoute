@@ -1,6 +1,7 @@
 package com.will.studio.bestroute.frontend.main;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,21 +52,30 @@ public class RouteItemListAdapter extends BaseAdapter {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context
                 .LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.content_one_item, parent, false);
+        if (convertView != null) {
+            return convertView;
+        } else {
+            convertView = inflater.inflate(R.layout.content_one_item, parent, false);
+        }
 
         final RouteItem item = itemList.get(position);
 
         TextView time = (TextView) convertView.findViewById(R.id.item_list_time);
         time.setText(item.getTime());
+        setTimeColor(time, item.isSwitchedOn());
+
         TextView from = (TextView) convertView.findViewById(R.id.item_list_from);
-        from.setText(item.getFrom());
+        from.setText(context.getString(R.string.from_address, item.getFrom()));
+
         TextView to = (TextView) convertView.findViewById(R.id.item_list_to);
-        to.setText(item.getTo());
+        to.setText(context.getString(R.string.to_address, item.getTo()));
+
         //TODO: show repeat
 
         Switch aSwitch = (Switch) convertView.findViewById(R.id.item_list_alarm_switch);
         aSwitch.setChecked(item.isSwitchedOn());
 
+        final View finalConvertView = convertView;
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -82,11 +92,19 @@ public class RouteItemListAdapter extends BaseAdapter {
                             .LENGTH_SHORT).show();
                 }
                 item.setIsSwitchedOn(isChecked);
+                TextView time = (TextView) finalConvertView.findViewById(R.id.item_list_time);
+                setTimeColor(time, isChecked);
                 routeDataManager.updateItem(item);
             }
         });
 
         return convertView;
     }
+
+    private void setTimeColor(TextView time, boolean isChecked) {
+        time.setTextColor(isChecked ? Color.BLACK : Color.GRAY);
+    }
+
+
 }
 

@@ -16,19 +16,18 @@
     tools:context=".frontend.main.Activities.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:text="@string/current_plans_title"
-        android:textSize="@dimen/abc_dialog_padding_top_material"/>
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="start"-->
+        <!--android:text="@string/current_plans_title"-->
+        <!--android:textSize="@dimen/abc_dialog_padding_top_material"/>-->
 
     <ListView
         android:id="@+id/main_item_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:longClickable="true"
         android:divider="#afa1a1"
         android:dividerHeight="1dp"/>
 
