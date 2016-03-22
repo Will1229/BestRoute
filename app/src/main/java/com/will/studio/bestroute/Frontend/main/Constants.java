@@ -25,4 +25,5 @@ public interface Constants {
     @SuppressWarnings("SpellCheckingInspection")
     String APP_KEY = "AIzaSyDPQ1GwAKKQZaxH1cmyVbx0FLDwKqKlJD8";
 
+    boolean showTraffic = false;
 }

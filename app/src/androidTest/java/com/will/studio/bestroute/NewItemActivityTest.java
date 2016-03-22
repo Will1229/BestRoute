@@ -32,8 +32,6 @@ public class NewItemActivityTest extends ActivityInstrumentationTestCase2<NewIte
         fromText = (EditText) newItemActivity.findViewById(R.id.new_item_from);
         toText = (EditText) newItemActivity.findViewById(R.id.new_item_to);
         alarmText = (TextView) newItemActivity.findViewById(R.id.new_item_time);
-        cancelButton = (Button) newItemActivity.findViewById(R.id.cancel_button);
-        saveButton = (Button) newItemActivity.findViewById(R.id.save_button);
 
     }
 

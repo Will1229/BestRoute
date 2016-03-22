@@ -66,7 +66,7 @@ public class RouteNotificationBuilder {
         String[] contents = new String[]{
                 "From " + routeItem.getFrom(),
                 "Current best route is " + leg.getDistance().getText(),
-                "Click to show the route on map"
+                "Click to show the route on map_menu"
         };
         inboxStyle.setBigContentTitle(title);
         for (String line : contents) {
@@ -74,7 +74,7 @@ public class RouteNotificationBuilder {
         }
         notificationBuilder.setStyle(inboxStyle);
 
-        //build map intent into notification
+        //build map_menu intent into notification
         Intent mapIntent = new Intent(context, MapViewActivity.class);
         mapIntent.putExtra(Constants.EXTRA_NAME_ROUTE_ITEM, routeItem);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);

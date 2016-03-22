@@ -37,6 +37,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".frontend.main.activities.MainActivity"/>
         </activity>
+        <activity
+            android:name=".frontend.main.activities.MapViewActivity"
+            android:parentActivityName=".frontend.main.activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".frontend.main.activities.MainActivity"/>
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -45,7 +53,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAGzeWRSZ52WwnQ4oqhYqHBP6dmJxBcjzc"/>
 
-        <activity android:name=".frontend.main.activities.MapViewActivity"></activity>
 
         <receiver
             android:name=".frontend.main.receivers.BootReceiver"

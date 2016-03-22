@@ -34,6 +34,7 @@ public class NewItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_item);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_add_new_item);
         toolbar.setTitle(R.string.new_item_toolbar_title);
+
         setSupportActionBar(toolbar);
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         if (ab != null) {
