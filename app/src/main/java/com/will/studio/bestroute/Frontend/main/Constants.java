@@ -11,8 +11,10 @@ public interface Constants {
 
     String EXTRA_NAME_ROUTE_ITEM = "route_item";
 
+    // request code
     int NOTIFICATION_REQUEST_CODE = 1;
     int UPDATE_ITEM_REQUEST_CODE = 2;
+    int PLACE_PICKER_REQUEST_CODE = 3;
 
     String UPDATED_ROUTE_ITEM = "updated_route_item";
 

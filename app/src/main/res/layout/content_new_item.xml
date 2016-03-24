@@ -14,62 +14,159 @@
                 tools:showIn="@layout/activity_new_item">
 
     <TextView
+        android:id="@+id/new_item_from_guide"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/new_item_hint"
         android:layout_marginBottom="5dp"
+        android:text="@string/new_item_from_guide"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textStyle="italic"
-        android:id="@+id/new_item_hint"/>
+        android:textStyle="italic"/>
 
-    <EditText
-        android:id="@+id/new_item_from"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/new_item_from"
-        android:inputType="text"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_below="@+id/new_item_hint"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-
-
-    <EditText
-        android:id="@+id/new_item_to"
+    <LinearLayout
+        android:id="@+id/new_item_from_row"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/new_item_from"
-        android:hint="@string/new_item_to"
-        android:inputType="text"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:layout_below="@+id/new_item_from_guide"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:orientation="horizontal">
 
+        <EditText
+            android:id="@+id/new_item_from_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/new_item_from_hint"
+            android:inputType="textNoSuggestions"
+            android:lines="1"
+            android:maxLines="1"
+            android:onClick="showPlacePicker"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textColor="@color/place_autocomplete_search_text"
+            android:textColorHint="@color/place_autocomplete_search_hint"
+            />
+
+        <ImageButton
+            android:id="@+id/new_item_clear_from_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/place_autocomplete_clear_button"
+            android:onClick="clearText"
+            android:padding="@dimen/place_autocomplete_button_padding"
+            android:src="@drawable/places_ic_clear"
+            />
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/new_item_alarm"
+        android:id="@+id/new_item_to_guide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/new_item_from_row"
+        android:text="@string/new_item_to_guide"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textStyle="italic"/>
+
+    <LinearLayout
+        android:id="@+id/new_item_to_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/new_item_to_guide"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/new_item_to_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/new_item_to_hint"
+            android:inputType="textNoSuggestions"
+            android:lines="1"
+            android:maxLines="1"
+            android:onClick="showPlacePicker"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textColor="@color/place_autocomplete_search_text"
+            android:textColorHint="@color/place_autocomplete_search_hint"
+            />
+
+        <ImageButton
+            android:id="@+id/new_item_clear_to_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/place_autocomplete_clear_button"
+            android:onClick="clearText"
+            android:padding="@dimen/place_autocomplete_button_padding"
+            android:src="@drawable/places_ic_clear"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/new_item_alarm_guide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/new_item_to_row"
+        android:text="@string/new_item_alarm_guide"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textStyle="italic"/>
+
+    <LinearLayout
+        android:id="@+id/new_item_alarm_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/new_item_to"
-        android:layout_marginTop="5dp"
-        android:text="@string/new_item_alarm"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:layout_below="@+id/new_item_alarm_guide"
+        android:orientation="horizontal">
 
+    </LinearLayout>
 
     <TextView
         android:id="@+id/new_item_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/new_item_alarm"
-        android:layout_marginLeft="10dp"
-        android:layout_toEndOf="@+id/new_item_alarm"
-        android:layout_toRightOf="@+id/new_item_alarm"
+        android:layout_below="@+id/new_item_alarm_guide"
+        android:layout_centerHorizontal="true"
         android:clickable="true"
+        android:hint="@string/new_item_null_time"
         android:onClick="showTimePickerDialog"
         android:text="@string/new_item_null_time"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <ProgressBar
+        android:id="@+id/new_item_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>

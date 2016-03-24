@@ -16,9 +16,11 @@
     <string name="settings_title">Settings</string>
 
     <!-- Strings related to NewItemActivity -->
-    <string name="new_item_toolbar_title">Add New Route</string>
-    <string name="new_item_hint">Tips: write accurate street address like this:\nRiksgatan 1,
-        Stockholm</string>
+    <string name="new_item_toolbar_title">New Route</string>
+    <string name="new_item_toolbar_title_edit">Edit Route</string>
+    <string name="new_item_from_guide">1. Choose starting point</string>
+    <string name="new_item_to_guide">2. Choose destination</string>
+    <string name="new_item_alarm_guide">3. Choose departure time and save</string>
     <string name="new_item_toast_fill_all_blanks">You need to fill all blanks</string>
     <string name="new_item_toast_illegal_from">Did you type correct FROM address? We can\'t
         locate it</string>
@@ -26,11 +28,8 @@
         it</string>
     <string name="new_item_toast_unknown_error">Unknown error. Try again</string>
     <string name="show_route_button">Show Route</string>
-    <string name="cancel_button">Cancel</string>
-    <string name="save_button">Save</string>
-    <string name="notification_button">Preview Notification</string>
-    <string name="new_item_from">Choose starting point</string>
-    <string name="new_item_to">To</string>
+    <string name="new_item_from_hint">Tap to set starting point</string>
+    <string name="new_item_to_hint">Tap to set destination</string>
     <string name="new_item_alarm">Departure time: </string>
     <string name="new_item_null_time">--:--</string>
     <string name="new_item_mon">Mo</string>

@@ -29,8 +29,8 @@ public class NewItemActivityTest extends ActivityInstrumentationTestCase2<NewIte
         super.setUp();
         setActivityInitialTouchMode(true);
         newItemActivity = getActivity();
-        fromText = (EditText) newItemActivity.findViewById(R.id.new_item_from);
-        toText = (EditText) newItemActivity.findViewById(R.id.new_item_to);
+        fromText = (EditText) newItemActivity.findViewById(R.id.new_item_from_text);
+        toText = (EditText) newItemActivity.findViewById(R.id.new_item_to_text);
         alarmText = (TextView) newItemActivity.findViewById(R.id.new_item_time);
 
     }
