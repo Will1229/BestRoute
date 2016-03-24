@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity
 
     private RouteDataManager routeDataManager;
     private RouteAlarmScheduler routeAlarmScheduler;
+    private ProgressBar progressBar;
     private int currentItemIdx = 0;
 
     @Override
@@ -98,6 +100,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        progressBar = (ProgressBar) findViewById(R.id.main_progress_bar);
+        progressBar.setVisibility(View.GONE);
+
         routeDataManager.restoreAllItemsFromDisc();
         refreshRouteItems();
     }
@@ -138,14 +143,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getDirectionAndShow(final RouteItem routeItem) {
-        LatLng from = GoogleDirectionHelper.getLocationFromAddress(this, routeItem.getFrom());
-        LatLng to = GoogleDirectionHelper.getLocationFromAddress(this, routeItem.getTo());
-        if (from == null || to == null) {
-            Toast.makeText(MainActivity.this, getText(R.string.invalid_address), Toast
-                    .LENGTH_SHORT).show();
-            return;
-        }
+        progressBar.setVisibility(View.VISIBLE);
 
+        LatLng from = new LatLng(routeItem.getFromLat(), routeItem.getFromLng());
+        LatLng to = new LatLng(routeItem.getToLat(), routeItem.getToLng());
         // TODO: make them settable in new item activity
         GoogleDirection
                 .withServerKey(Constants.APP_KEY)
@@ -154,7 +155,6 @@ public class MainActivity extends AppCompatActivity
                 .departureTime("now")
                 .transportMode(TransportMode.DRIVING)
                 .execute(new DirectionCallback() {
-
                     @Override
                     public void onDirectionSuccess(Direction direction, String rawBody) {
                         String status = direction.getStatus();
@@ -174,6 +174,7 @@ public class MainActivity extends AppCompatActivity
                     public void onDirectionFailure(Throwable t) {
                         Toast.makeText(MainActivity.this, getText(R.string.direction_failure),
                                 Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
     }

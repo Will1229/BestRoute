@@ -16,19 +16,36 @@
     tools:context=".frontend.main.activities.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="start"-->
-        <!--android:text="@string/current_plans_title"-->
-        <!--android:textSize="@dimen/abc_dialog_padding_top_material"/>-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="start"
+        android:text="@string/current_plans_title"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textStyle="italic"/>
 
-    <ListView
-        android:id="@+id/main_item_list"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:divider="#afa1a1"
-        android:dividerHeight="1dp"/>
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/main_item_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:divider="#afa1a1"
+            android:dividerHeight="1dp"/>
+
+        <ProgressBar
+            android:id="@+id/main_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
 
 </LinearLayout>
