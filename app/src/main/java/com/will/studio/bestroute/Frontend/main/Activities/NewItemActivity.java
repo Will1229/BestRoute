@@ -22,7 +22,6 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.will.studio.bestroute.R;
-import com.will.studio.bestroute.backend.GoogleDirectionHelper;
 import com.will.studio.bestroute.backend.RouteDataManager;
 import com.will.studio.bestroute.backend.RouteItem;
 import com.will.studio.bestroute.frontend.main.Constants;
@@ -35,6 +34,8 @@ public class NewItemActivity extends AppCompatActivity {
     private RouteItem existingRouteItem;
     private final String currentViewId = "current_view_id";
     private ProgressBar progressBar;
+    private LatLng currentFromLatLng;
+    private LatLng currentToLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,10 @@ public class NewItemActivity extends AppCompatActivity {
         if (existingRouteItem != null) {
             toolbar.setTitle(R.string.new_item_toolbar_title_edit);
             fillBlanks(existingRouteItem);
+            currentFromLatLng = new LatLng(existingRouteItem.getFromLat(), existingRouteItem
+                    .getFromLng());
+            currentToLatLng = new LatLng(existingRouteItem.getToLat(), existingRouteItem
+                    .getToLng());
         } else {
             toolbar.setTitle(R.string.new_item_toolbar_title);
         }
@@ -160,21 +165,16 @@ public class NewItemActivity extends AppCompatActivity {
             if (newItem == null) {
                 return SaveItemReturnCode.EMPTY_ADD;
             }
-            LatLng from = GoogleDirectionHelper.getLocationFromAddress(getApplicationContext(),
-                    newItem.getFrom());
-            LatLng to = GoogleDirectionHelper.getLocationFromAddress(getApplicationContext(),
-                    newItem.getTo());
-
-            if (from == null) {
+            if (currentFromLatLng == null) {
                 return SaveItemReturnCode.ILLEGAL_FROM;
-            } else if (to == null) {
+            } else if (currentToLatLng == null) {
                 return SaveItemReturnCode.ILLEGAL_TO;
             }
 
-            newItem.setFromLat(from.latitude);
-            newItem.setFromLng(from.longitude);
-            newItem.setToLat(to.latitude);
-            newItem.setToLng(to.longitude);
+            newItem.setFromLat(currentFromLatLng.latitude);
+            newItem.setFromLng(currentFromLatLng.longitude);
+            newItem.setToLat(currentToLatLng.latitude);
+            newItem.setToLng(currentToLatLng.longitude);
 
             String dirPath = getApplicationContext().getFilesDir().getAbsolutePath();
             RouteDataManager routeDataManager = new RouteDataManager(dirPath);
@@ -257,6 +257,12 @@ public class NewItemActivity extends AppCompatActivity {
                 EditText editText = (EditText) findViewById(viewId);
                 if (editText != null) {
                     editText.setText(place.getName());
+                }
+
+                if (viewId == R.id.new_item_from_text) {
+                    currentFromLatLng = place.getLatLng();
+                } else if (viewId == R.id.new_item_to_text) {
+                    currentToLatLng = place.getLatLng();
                 }
             }
         }

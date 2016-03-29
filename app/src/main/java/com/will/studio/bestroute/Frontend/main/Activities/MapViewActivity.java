@@ -30,7 +30,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.will.studio.bestroute.R;
-import com.will.studio.bestroute.backend.CommonDefinitions;
 import com.will.studio.bestroute.backend.GoogleDirectionHelper;
 import com.will.studio.bestroute.backend.RouteItem;
 import com.will.studio.bestroute.frontend.main.Constants;
