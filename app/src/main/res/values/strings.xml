@@ -42,11 +42,15 @@
 
 
     <!-- Strings related to MainActivity -->
-    <string name="current_plans_title">My Route Plans</string>
+    <string name="main_top_text_title">My Route Plans</string>
+    <string name="main_top_text_title_empty">Click "+" to add your route plan</string>
     <string name="success_to_save_new_item">Your route plan is saved and will be updated everyday at: </string>
     <string name="fail_to_save_new_item">Failed to save. Try again</string>
     <string name="from_address">From: %s</string>
     <string name="to_address">To: %s</string>
+    <string name="drawer_item_add_new_plan">Add New Route</string>
+    <string name="drawer_item_setting">Settings</string>
+    <string name="main_activity_title">Best Route</string>
 
     <!-- Strings related to MapActivity -->
     <string name="map_summary">Best route: %1$s</string>
@@ -73,7 +77,6 @@
     <string name="delete">Delete</string>
     <string name="back">Back</string>
     <string name="call_google_map">Show In Google Map</string>
-
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>

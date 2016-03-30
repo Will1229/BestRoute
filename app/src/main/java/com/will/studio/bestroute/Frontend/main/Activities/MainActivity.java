@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_current_items);
+        toolbar.setTitle(R.string.main_activity_title);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -185,6 +187,13 @@ public class MainActivity extends AppCompatActivity
         ListView view = (ListView) findViewById(R.id.main_item_list);
         view.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        TextView textView = (TextView) findViewById(R.id.main_top_text);
+        if (itemList.isEmpty()) {
+            textView.setText(R.string.main_top_text_title_empty);
+        } else {
+            textView.setText(R.string.main_top_text_title);
+        }
     }
 
     @Override

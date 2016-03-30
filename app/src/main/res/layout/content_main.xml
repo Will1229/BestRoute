@@ -17,11 +17,12 @@
     tools:showIn="@layout/app_bar_main">
 
     <TextView
+        android:id="@+id/main_top_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="start"
-        android:text="@string/current_plans_title"
+        android:text="@string/main_top_text_title"
         android:textAppearance="?android:textAppearanceMedium"
         android:textStyle="italic"/>
 
