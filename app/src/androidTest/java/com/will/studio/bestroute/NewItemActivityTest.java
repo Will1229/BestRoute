@@ -5,7 +5,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.will.studio.bestroute.frontend.main.activities.NewItemActivity;
+import com.will.studio.bestroute.activities.NewItemActivity;
 
 /**
  * Created by egaozhi on 2016-01-04.

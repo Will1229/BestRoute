@@ -1,12 +1,12 @@
-package com.will.studio.bestroute.frontend.main.receivers;
+package com.will.studio.bestroute.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.will.studio.bestroute.backend.RouteDataManager;
-import com.will.studio.bestroute.backend.RouteItem;
-import com.will.studio.bestroute.frontend.main.RouteAlarmScheduler;
+import com.will.studio.bestroute.routeData.RouteDataManager;
+import com.will.studio.bestroute.routeData.RouteItem;
+import com.will.studio.bestroute.main.RouteAlarmScheduler;
 
 import java.util.ArrayList;
 

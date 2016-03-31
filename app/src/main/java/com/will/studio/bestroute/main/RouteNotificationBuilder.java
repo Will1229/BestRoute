@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main;
+package com.will.studio.bestroute.main;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -12,10 +12,10 @@ import android.support.v4.app.NotificationCompat;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
 import com.will.studio.bestroute.R;
-import com.will.studio.bestroute.backend.RouteItem;
-import com.will.studio.bestroute.frontend.main.activities.MapViewActivity;
-import com.will.studio.bestroute.frontend.main.receivers.DismissReceiver;
-import com.will.studio.bestroute.frontend.main.receivers.NaviReceiver;
+import com.will.studio.bestroute.routeData.RouteItem;
+import com.will.studio.bestroute.activities.MapViewActivity;
+import com.will.studio.bestroute.receivers.DismissReceiver;
+import com.will.studio.bestroute.receivers.NaviReceiver;
 
 /**
  * Created by egaozhi on 2016-01-29.
@@ -66,7 +66,7 @@ public class RouteNotificationBuilder {
         String[] contents = new String[]{
                 "From " + routeItem.getFrom(),
                 "Current best route is " + leg.getDistance().getText(),
-                "Click to show the route on map_menu"
+                "Click to show the route on map"
         };
         inboxStyle.setBigContentTitle(title);
         for (String line : contents) {

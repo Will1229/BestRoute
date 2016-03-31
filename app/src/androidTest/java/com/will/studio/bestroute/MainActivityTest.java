@@ -3,7 +3,7 @@ package com.will.studio.bestroute;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 
-import com.will.studio.bestroute.frontend.main.activities.MainActivity;
+import com.will.studio.bestroute.activities.MainActivity;
 
 /**
  * Created by egaozhi on 2016-01-04.

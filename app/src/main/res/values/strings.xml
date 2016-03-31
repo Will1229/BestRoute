@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BestRoute</string>
+    <string name="app_name">Best Route</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -50,7 +50,6 @@
     <string name="to_address">To: %s</string>
     <string name="drawer_item_add_new_plan">Add New Route</string>
     <string name="drawer_item_setting">Settings</string>
-    <string name="main_activity_title">Best Route</string>
 
     <!-- Strings related to MapActivity -->
     <string name="map_summary">Best route: %1$s</string>

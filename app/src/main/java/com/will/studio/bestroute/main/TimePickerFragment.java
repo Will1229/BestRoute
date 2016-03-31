@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main;
+package com.will.studio.bestroute.main;
 
 import android.app.Dialog;
 import android.app.DialogFragment;

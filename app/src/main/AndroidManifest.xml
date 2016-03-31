@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".frontend.main.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,24 +26,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".frontend.settings.SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"/>
         <activity
-            android:name=".frontend.main.activities.NewItemActivity"
+            android:name=".activities.NewItemActivity"
             android:label="@string/title_activity_new_item"
-            android:parentActivityName=".frontend.main.activities.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".frontend.main.activities.MainActivity"/>
+                android:value=".activities.MainActivity"/>
         </activity>
         <activity
-            android:name=".frontend.main.activities.MapViewActivity"
-            android:parentActivityName=".frontend.main.activities.MainActivity"
+            android:name=".activities.MapViewActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".frontend.main.activities.MainActivity"/>
+                android:value=".activities.MainActivity"/>
         </activity>
 
         <meta-data
@@ -55,15 +55,15 @@
 
 
         <receiver
-            android:name=".frontend.main.receivers.BootReceiver"
+            android:name=".receivers.BootReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
-        <receiver android:name=".frontend.main.receivers.NotificationReceiver"/>
-        <receiver android:name=".frontend.main.receivers.DismissReceiver"/>
-        <receiver android:name=".frontend.main.receivers.NaviReceiver"/>
+        <receiver android:name=".receivers.NotificationReceiver"/>
+        <receiver android:name=".receivers.DismissReceiver"/>
+        <receiver android:name=".receivers.NaviReceiver"/>
     </application>
 
 </manifest>

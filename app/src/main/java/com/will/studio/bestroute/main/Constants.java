@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main;
+package com.will.studio.bestroute.main;
 
 /**
  * Created by egaozhi on 2016-01-15.

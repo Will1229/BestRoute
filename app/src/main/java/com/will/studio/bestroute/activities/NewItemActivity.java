@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main.activities;
+package com.will.studio.bestroute.activities;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -22,11 +22,11 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.will.studio.bestroute.R;
-import com.will.studio.bestroute.backend.RouteDataManager;
-import com.will.studio.bestroute.backend.RouteItem;
-import com.will.studio.bestroute.frontend.main.Constants;
-import com.will.studio.bestroute.frontend.main.Constants.SaveItemReturnCode;
-import com.will.studio.bestroute.frontend.main.TimePickerFragment;
+import com.will.studio.bestroute.routeData.RouteDataManager;
+import com.will.studio.bestroute.routeData.RouteItem;
+import com.will.studio.bestroute.main.Constants;
+import com.will.studio.bestroute.main.Constants.SaveItemReturnCode;
+import com.will.studio.bestroute.main.TimePickerFragment;
 
 public class NewItemActivity extends AppCompatActivity {
 

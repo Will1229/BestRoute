@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.settings;
+package com.will.studio.bestroute.activities;
 
 
 import android.annotation.TargetApi;

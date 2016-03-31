@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main.receivers;
+package com.will.studio.bestroute.receivers;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -13,10 +13,10 @@ import com.akexorcist.googledirection.constant.RequestResult;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.google.android.gms.maps.model.LatLng;
-import com.will.studio.bestroute.backend.GoogleDirectionHelper;
-import com.will.studio.bestroute.backend.RouteItem;
-import com.will.studio.bestroute.frontend.main.Constants;
-import com.will.studio.bestroute.frontend.main.RouteNotificationBuilder;
+import com.will.studio.bestroute.routeData.GoogleDirectionHelper;
+import com.will.studio.bestroute.routeData.RouteItem;
+import com.will.studio.bestroute.main.Constants;
+import com.will.studio.bestroute.main.RouteNotificationBuilder;
 
 /**
  * Created by egaozhi on 2016-01-08.

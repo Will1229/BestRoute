@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main.activities;
+package com.will.studio.bestroute.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -30,9 +30,9 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.will.studio.bestroute.R;
-import com.will.studio.bestroute.backend.GoogleDirectionHelper;
-import com.will.studio.bestroute.backend.RouteItem;
-import com.will.studio.bestroute.frontend.main.Constants;
+import com.will.studio.bestroute.routeData.GoogleDirectionHelper;
+import com.will.studio.bestroute.routeData.RouteItem;
+import com.will.studio.bestroute.main.Constants;
 
 import java.util.ArrayList;
 import java.util.List;

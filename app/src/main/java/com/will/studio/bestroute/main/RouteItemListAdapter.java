@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main;
+package com.will.studio.bestroute.main;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -12,8 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.will.studio.bestroute.R;
-import com.will.studio.bestroute.backend.RouteDataManager;
-import com.will.studio.bestroute.backend.RouteItem;
+import com.will.studio.bestroute.routeData.RouteDataManager;
+import com.will.studio.bestroute.routeData.RouteItem;
 
 import java.util.ArrayList;
 

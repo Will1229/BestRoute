@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main.activities;
+package com.will.studio.bestroute.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,13 +28,12 @@ import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.google.android.gms.maps.model.LatLng;
 import com.will.studio.bestroute.R;
-import com.will.studio.bestroute.backend.GoogleDirectionHelper;
-import com.will.studio.bestroute.backend.RouteDataManager;
-import com.will.studio.bestroute.backend.RouteItem;
-import com.will.studio.bestroute.frontend.main.Constants;
-import com.will.studio.bestroute.frontend.main.RouteAlarmScheduler;
-import com.will.studio.bestroute.frontend.main.RouteItemListAdapter;
-import com.will.studio.bestroute.frontend.settings.SettingsActivity;
+import com.will.studio.bestroute.routeData.GoogleDirectionHelper;
+import com.will.studio.bestroute.routeData.RouteDataManager;
+import com.will.studio.bestroute.routeData.RouteItem;
+import com.will.studio.bestroute.main.Constants;
+import com.will.studio.bestroute.main.RouteAlarmScheduler;
+import com.will.studio.bestroute.main.RouteItemListAdapter;
 
 import java.util.ArrayList;
 
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_current_items);
-        toolbar.setTitle(R.string.main_activity_title);
+        toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

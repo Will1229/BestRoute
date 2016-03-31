@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.frontend.main.receivers;
+package com.will.studio.bestroute.receivers;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.will.studio.bestroute.frontend.main.Constants;
+import com.will.studio.bestroute.main.Constants;
 
 /**
  * Created by egaozhi on 2016-01-25.

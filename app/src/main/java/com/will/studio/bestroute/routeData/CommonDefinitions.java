@@ -1,4 +1,4 @@
-package com.will.studio.bestroute.backend;
+package com.will.studio.bestroute.routeData;
 
 /**
  * Created by egaozhi on 2016-01-05.
