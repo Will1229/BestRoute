@@ -28,12 +28,13 @@ import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.google.android.gms.maps.model.LatLng;
 import com.will.studio.bestroute.R;
-import com.will.studio.bestroute.routeData.GoogleDirectionHelper;
-import com.will.studio.bestroute.routeData.RouteDataManager;
-import com.will.studio.bestroute.routeData.RouteItem;
+import com.will.studio.bestroute.main.AboutFragment;
 import com.will.studio.bestroute.main.Constants;
 import com.will.studio.bestroute.main.RouteAlarmScheduler;
 import com.will.studio.bestroute.main.RouteItemListAdapter;
+import com.will.studio.bestroute.routeData.GoogleDirectionHelper;
+import com.will.studio.bestroute.routeData.RouteDataManager;
+import com.will.studio.bestroute.routeData.RouteItem;
 
 import java.util.ArrayList;
 
@@ -165,8 +166,10 @@ public class MainActivity extends AppCompatActivity
                             mapViewIntent.putExtra(Constants.EXTRA_NAME_ROUTE_ITEM, routeItem);
                             startActivity(mapViewIntent);
                         } else {
-                            Toast.makeText(MainActivity.this, getText(R.string.direction_nok),
-                                    Toast.LENGTH_SHORT).show();
+                            String errorMsg = direction.getErrorMessage();
+                            Toast.makeText(MainActivity.this, getApplication().getString(R.string
+                                    .direction_nok, errorMsg), Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
                         }
                     }
 
@@ -174,7 +177,7 @@ public class MainActivity extends AppCompatActivity
                     public void onDirectionFailure(Throwable t) {
                         Toast.makeText(MainActivity.this, getText(R.string.direction_failure),
                                 Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
     }
@@ -207,7 +210,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -232,6 +235,9 @@ public class MainActivity extends AppCompatActivity
             routeDataManager.deleteAllItems();
             refreshRouteItems();
             return true;
+        } else if (id == R.id.action_about) {
+            AboutFragment aboutFragment = new AboutFragment();
+            aboutFragment.show(this.getFragmentManager(), "aboutFragment");
         }
 
         return super.onOptionsItemSelected(item);
