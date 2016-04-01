@@ -57,11 +57,10 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        final Intent newItemIntent = new Intent(this, NewItemActivity.class);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(newItemIntent, Constants.UPDATE_ITEM_REQUEST_CODE);
+                createNewItem();
             }
         });
 
@@ -244,8 +243,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_addNewItem) {
-            Intent newItemIntent = new Intent(this, NewItemActivity.class);
-            startActivityForResult(newItemIntent, Constants.UPDATE_ITEM_REQUEST_CODE);
+            createNewItem();
             return true;
 
         } else if (id == R.id.nav_manage) {
@@ -257,6 +255,17 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void createNewItem() {
+        if (routeDataManager.getAllItems().size() >= Constants.MAX_ITEM_NUM) {
+            Toast.makeText(this, this.getString(R.string.main_reach_max_item_num, Constants
+                            .MAX_ITEM_NUM),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent newItemIntent = new Intent(this, NewItemActivity.class);
+        startActivityForResult(newItemIntent, Constants.UPDATE_ITEM_REQUEST_CODE);
     }
 
     @Override

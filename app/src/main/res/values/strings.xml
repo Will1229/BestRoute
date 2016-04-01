@@ -50,6 +50,7 @@
     <string name="to_address">To: %s</string>
     <string name="drawer_item_add_new_plan">Add New Route</string>
     <string name="drawer_item_setting">Settings</string>
+    <string name="main_reach_max_item_num">You can only create %d route plans</string>
 
     <!-- Strings related to MapActivity -->
     <string name="map_summary">Best route: %1$s</string>
@@ -77,8 +78,12 @@
     <string name="back">Back</string>
     <string name="call_google_map">Show In Google Map</string>
 
-    <!-- Example General settings -->
+    <!-- General settings -->
     <string name="pref_header_general">General</string>
+
+    <string name="pref_title_show_traffic">Traffic</string>
+    <string name="pref_description_show_traffic">Show real time traffic situation on route
+        map</string>
 
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact

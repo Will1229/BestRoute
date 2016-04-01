@@ -7,7 +7,6 @@ package com.will.studio.bestroute.main;
 public interface Constants {
     String NOTIFICATION_ID = "notification_id";
     int NOTIFICATION_ID_VALUE = 1;
-    String NOTIFICATION_NAME = "notification";
 
     String EXTRA_NAME_ROUTE_ITEM = "route_item";
 
@@ -27,5 +26,5 @@ public interface Constants {
     @SuppressWarnings("SpellCheckingInspection")
     String APP_KEY = "AIzaSyDPQ1GwAKKQZaxH1cmyVbx0FLDwKqKlJD8";
 
-    boolean showTraffic = false;
+    int MAX_ITEM_NUM = 3;
 }

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -30,9 +31,9 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.will.studio.bestroute.R;
+import com.will.studio.bestroute.main.Constants;
 import com.will.studio.bestroute.routeData.GoogleDirectionHelper;
 import com.will.studio.bestroute.routeData.RouteItem;
-import com.will.studio.bestroute.main.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,7 +130,9 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         // TODO: make them settable in options
         googleMap.getUiSettings().setZoomControlsEnabled(false);
         googleMap.getUiSettings().setCompassEnabled(true);
-        googleMap.setTrafficEnabled(Constants.showTraffic);
+        Boolean showTraffic = PreferenceManager.getDefaultSharedPreferences(this).getBoolean
+                ("traffic_switch", true);
+        googleMap.setTrafficEnabled(showTraffic);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -159,7 +162,10 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
 
         SwitchCompat switchCompat = (SwitchCompat) item.getActionView().findViewById(R.id
                 .map_traffic_switch);
-        switchCompat.setChecked(Constants.showTraffic);
+
+        Boolean showTraffic = PreferenceManager.getDefaultSharedPreferences(this).getBoolean
+                ("traffic_switch", true);
+        switchCompat.setChecked(showTraffic);
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
