@@ -9,11 +9,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="20dp"
         android:autoLink="all"
         android:linksClickable="true"
-        android:text="Version: 1.0\nAuthor: Will1229\n"
-        android:textAlignment="center"
+        android:text="Version: 1.0\n- This is a trial version.\n- Only 2500 direction request can be made per day\n- Only 3 route plans can be created"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
 
 
@@ -24,6 +25,7 @@
         android:layout_below="@+id/about_description"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
         android:autoLink="web"
         android:linksClickable="true"
         android:text="Find us on github:\nhttps://github.com/Will1229/BestRoute"
