@@ -2,8 +2,8 @@
 
 This is an Android APP which helps you choose the best route to drive to work and back home every day.
 
-Google service is need on the phone.
+Available on Google Play:
 
-It's working but further development is still ongoing.
+https://play.google.com/store/apps/details?id=com.will.studio.bestroute&hl=en
 
 Enjoy.
