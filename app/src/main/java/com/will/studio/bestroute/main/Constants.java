@@ -24,7 +24,8 @@ public interface Constants {
     enum SaveItemReturnCode {OK, EMPTY_ADD, ILLEGAL_FROM, ILLEGAL_TO, UNKNOWN_ERROR}
 
     @SuppressWarnings("SpellCheckingInspection")
-    String APP_KEY = "AIzaSyDPQ1GwAKKQZaxH1cmyVbx0FLDwKqKlJD8";
+//    String APP_KEY = "AIzaSyDPQ1GwAKKQZaxH1cmyVbx0FLDwKqKlJD8";
+    String APP_KEY = "AIzaSyAGzeWRSZ52WwnQ4oqhYqHBP6dmJxBcjzc";
 
     int MAX_ITEM_NUM = 3;
 }

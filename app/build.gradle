@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'willKeyStone'
+            keyPassword '123456'
+            storeFile file('C:/Users/egaozhi/Documents/Android/willKeyStone.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
     defaultConfig {
@@ -15,6 +23,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
     productFlavors {
@@ -36,9 +48,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.9.5'
     //    compile(name: 'googleDirectionLibrary-release/googleDirectionLibrary-release', ext: 'aar')
-
     // Test only begin. include external libs for googleDirectionLibrary
-    provided "org.parceler:parceler:1.0.4"
+    provided 'org.parceler:parceler:1.0.4'
     // Test only end
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
