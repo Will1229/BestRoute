@@ -5,17 +5,17 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
 import com.will.studio.bestroute.R;
-import com.will.studio.bestroute.routeData.RouteItem;
 import com.will.studio.bestroute.activities.MapViewActivity;
 import com.will.studio.bestroute.receivers.DismissReceiver;
 import com.will.studio.bestroute.receivers.NaviReceiver;
+import com.will.studio.bestroute.routeData.RouteItem;
 
 /**
  * Created by egaozhi on 2016-01-29.
@@ -54,13 +54,27 @@ public class RouteNotificationBuilder {
         }
         String ticker = context.getText(R.string.notification_ticker) + " " + title;
 
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_directions_car)
                         .setTicker(ticker)
-                        .setSound(alarmSound)
                         .setAutoCancel(false);
+
+        Boolean isNotification = PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(context.getString(R.string.pref_key_new_message_notifications), true);
+        if (isNotification) {
+            String alarmSoundUri = PreferenceManager.getDefaultSharedPreferences(context).getString
+                    (context.getString(R.string.pref_key_ringtone), context.getString(R.string
+                            .pref_ringtone_default));
+            notificationBuilder.setSound(Uri.parse(alarmSoundUri));
+
+            Boolean isVibrate = PreferenceManager.getDefaultSharedPreferences(context).getBoolean
+                    (context.getString(R.string.pref_key_vibrate), false);
+            if (isVibrate) {
+                long[] pattern = {500, 1000};
+                notificationBuilder.setVibrate(pattern);
+            }
+        }
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         String[] contents = new String[]{

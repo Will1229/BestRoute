@@ -71,7 +71,7 @@ public class NewItemActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.new_item, menu);
+        getMenuInflater().inflate(R.menu.new_item_menu, menu);
         return true;
     }
 

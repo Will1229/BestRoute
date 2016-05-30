@@ -2,7 +2,7 @@
 
     <SwitchPreference
         android:defaultValue="true"
-        android:key="traffic_switch"
+        android:key="@string/pref_key_show_traffic"
         android:summary="@string/pref_description_show_traffic"
         android:title="@string/pref_title_show_traffic"/>
 

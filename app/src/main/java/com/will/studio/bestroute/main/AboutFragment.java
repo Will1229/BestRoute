@@ -28,7 +28,8 @@ public class AboutFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.setTitle(this.getString(R.string.app_name));
+        dialog.setTitle(this.getString(R.string.app_name) + " " + this.getString(R.string
+                .app_version));
         return dialog;
     }
 }

@@ -131,7 +131,7 @@ public class MapViewActivity extends AppCompatActivity implements OnMapReadyCall
         googleMap.getUiSettings().setZoomControlsEnabled(false);
         googleMap.getUiSettings().setCompassEnabled(true);
         Boolean showTraffic = PreferenceManager.getDefaultSharedPreferences(this).getBoolean
-                ("traffic_switch", true);
+                (getString(R.string.pref_key_show_traffic), true);
         googleMap.setTrafficEnabled(showTraffic);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
